@@ -1,4 +1,4 @@
-# UPI India
+# UPI India (for Android only)
 
 This plugin is used to integrate **UPI payment** in your **Android** app.
 
