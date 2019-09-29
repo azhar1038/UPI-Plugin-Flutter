@@ -1,4 +1,4 @@
-# upi_india
+# UPI India
 
 This plugin is used to integrate UPI payment in your app.
 
