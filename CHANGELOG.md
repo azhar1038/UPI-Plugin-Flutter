@@ -1,3 +1,3 @@
-## 0.0.1
+## 1.0.0
 
 * Plugin to implement UPI in Android
