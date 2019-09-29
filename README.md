@@ -1,6 +1,6 @@
 # UPI India
 
-This plugin is used to integrate UPI payment in your app.
+This plugin is used to integrate **UPI payment** in your **Android** app.
 
 Apps supported by this plugin are:
 * PayTM
