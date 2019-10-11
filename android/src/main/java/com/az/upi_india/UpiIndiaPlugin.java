@@ -14,6 +14,12 @@ import io.flutter.plugin.common.MethodChannel.Result;
 import io.flutter.plugin.common.PluginRegistry;
 import io.flutter.plugin.common.PluginRegistry.Registrar;
 
+class InvalidParametersException extends Exception{
+  public InvalidParametersException(String s){
+    super(s);
+  }
+}
+
 /** UpiIndiaPlugin */
 public class UpiIndiaPlugin implements MethodCallHandler, PluginRegistry.ActivityResultListener {
 
@@ -21,6 +27,7 @@ public class UpiIndiaPlugin implements MethodCallHandler, PluginRegistry.Activit
   Activity activity;
   Context context;
   MethodChannel.Result finalResult;
+  boolean exception = false;
 
   UpiIndiaPlugin(Registrar registrar, MethodChannel channel) {
     activity = registrar.activity();
@@ -61,6 +68,7 @@ public class UpiIndiaPlugin implements MethodCallHandler, PluginRegistry.Activit
 
       // Build the query and initiate the transaction.
       try {
+        exception = false;
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("upi").authority("pay");
         uriBuilder.appendQueryParameter("pa", receiverUpiId);
@@ -95,7 +103,9 @@ public class UpiIndiaPlugin implements MethodCallHandler, PluginRegistry.Activit
           result.success("app_not_installed");
         }
       } catch(Exception ex) {
-        result.success("invalid_parameters") ;
+        exception = true;
+        Log.d("UpiIndia NOTE: ",""+ex);
+        result.error("FAILED", "invalid_parameters", null);
       }
     } else {
       result.notImplemented();
@@ -109,13 +119,13 @@ public class UpiIndiaPlugin implements MethodCallHandler, PluginRegistry.Activit
       if(data != null) {
         try {
           String response = data.getStringExtra("response");
-          finalResult.success(response);
+          if(!exception) finalResult.success(response);
         } catch(Exception ex) {
-          finalResult.success("null_response");
+          if(!exception) finalResult.success("null_response");
         }
       } else {
         Log.d("UpiIndia NOTE: ","Received NULL, User cancelled the transaction.");
-        finalResult.success("user_canceled");
+        if(!exception) finalResult.success("user_canceled");
       }
     }
 

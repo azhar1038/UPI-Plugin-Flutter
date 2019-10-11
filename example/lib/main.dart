@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       receiverName: 'Tester',
       transactionRefId: 'TestingId',
       transactionNote: 'Not actual. Just an example.',
-      amount: 100.00,
+      amount: 1.00,
     );
 
     String response = await upi.startTransaction();
@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
               child: RaisedButton(
                   child: Text('PhonePe'),
                   onPressed: () {
-                    _transaction = initiateTransaction(UpiIndiaApps.PhonePe);
+                    _transaction = initiateTransaction(UpiIndiaApps.PhonePe,);
                     setState(() {});
                   }),
             ),
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                       break;
                     case UpiIndiaResponseError.INVALID_PARAMETERS:
                       return Text(
-                        'Requested payment is invalid.',
+                        'App is unable to handle request.',
                       );
                       break;
                     case UpiIndiaResponseError.USER_CANCELLED:
