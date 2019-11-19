@@ -141,8 +141,11 @@ class UpiIndiaResponseStatus {
   /// SUBMITTED occurs when transaction remains in pending state.
   static const String SUBMITTED = 'submitted';
 
-  /// FAILED occurs when transaction fails or user cancels it in the middle.
-  static const String FAILED = 'failed';
+  /// Deprecated! Don't use it. Use FAILURE instead.
+  static const String FAILED = 'failure';
+
+  /// FAILURE occurs when transaction fails or user cancels it in the middle.
+  static const String FAILURE = 'failure';
 
   /// In case status is not any of the three accepted value (by chance).
   static const String OTHER = 'other';

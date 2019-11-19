@@ -1,3 +1,7 @@
+## 1.1.1
+* Changed **UpiIndiaResponseStatus.FAILED** to **UpiIndiaResponseStatus.FAILURE**.
+* **UpiIndiaResponseStatus.FAILED** has been deprecated.
+
 ## 1.1.0
 
 * Prevented app to crash in case requested app wasn't ready to proceed payment

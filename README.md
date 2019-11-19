@@ -19,10 +19,16 @@ In response you will receive:
 * Transaction Reference ID
 * Status
 
-Status could be either of the following:
-* Success
-* Submitted
-* Failed
+You may face the following errors which you need to handle:
+* APP_NOT_INSTALLED
+* INVALID_PARAMETERS
+* NULL_RESPONSE
+* USER_CANCELLED
+
+Status of payment could be either of the following:
+* SUCCESS
+* SUBMITTED
+* FAILURE
 
 To know about how to use this plugin take a look at the following example.
 ```dart
