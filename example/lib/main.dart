@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   Future<String> initiateTransaction(String app) async {
     UpiIndia upi = new UpiIndia(
       app: app,
-      receiverUpiId: 'tester@test',
+      receiverUpiId: '8337976828@ybl',
       receiverName: 'Tester',
       transactionRefId: 'TestingId',
       transactionNote: 'Not actual. Just an example.',
@@ -49,9 +49,9 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               alignment: Alignment.center,
               child: RaisedButton(
-                  child: Text('PhonePe'),
+                  child: Text('GooglePay'),
                   onPressed: () {
-                    _transaction = initiateTransaction(UpiIndiaApps.PhonePe,);
+                    _transaction = initiateTransaction(UpiIndiaApps.GooglePay,);
                     setState(() {});
                   }),
             ),

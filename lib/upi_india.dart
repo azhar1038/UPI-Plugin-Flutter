@@ -70,6 +70,7 @@ class UpiIndia {
       print(error);
       return 'invalid_parameters';
     });
+    print('UPI_INDIA_FINAL_RESPONSE: $response');
     return response;
   }
 }
@@ -81,7 +82,7 @@ class UpiIndiaApps {
   static const String GooglePay = "com.google.android.apps.nbu.paisa.user";
   static const String BHIMUPI = "in.org.npci.upiapp";
   static const String PhonePe = "com.phonepe.app";
-  static const String MiPay = "com.mipay.in.wallet";
+  // static const String MiPay = "com.mipay.in.wallet";
   static const String AmazonPay = "in.amazon.mShop.android.shopping";
   static const String TrueCallerUPI = "com.truecaller";
   static const String MyAirtelUPI = "com.myairtelapp";
@@ -143,8 +144,8 @@ class UpiIndiaResponseStatus {
   /// SUBMITTED occurs when transaction remains in pending state.
   static const String SUBMITTED = 'submitted';
 
-  /// Deprecated! Don't use it. Use FAILURE instead.
-  static const String FAILED = 'failure';
+  // Deprecated! Don't use it. Use FAILURE instead.
+  //static const String FAILED = 'failure';
 
   /// FAILURE occurs when transaction fails or user cancels it in the middle.
   static const String FAILURE = 'failure';
