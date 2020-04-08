@@ -81,10 +81,12 @@ class UpiIndiaApps {
   static const String GooglePay = "com.google.android.apps.nbu.paisa.user";
   static const String BHIMUPI = "in.org.npci.upiapp";
   static const String PhonePe = "com.phonepe.app";
-  static const String MiPay = "com.mipay.wallet.in";
+  static const String MiPay = "com.mipay.in.wallet";
   static const String AmazonPay = "in.amazon.mShop.android.shopping";
   static const String TrueCallerUPI = "com.truecaller";
   static const String MyAirtelUPI = "com.myairtelapp";
+  static const String MobikwikUPI = "com.mobikwik_new";
+  static const String FreeChargeUPI = "com.freecharge.android";
 }
 
 // Class to process the response of upi request.

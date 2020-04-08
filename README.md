@@ -8,9 +8,11 @@ Apps supported by this plugin are:
 * BHIM
 * PhonePe
 * Mi Pay
-* Amozon Pay
+* Amazon Pay
 * Truecaller
 * My Airtel
+* Mobikwik
+* FreeCharge
 
 In response you will receive:
 * Transaction ID
