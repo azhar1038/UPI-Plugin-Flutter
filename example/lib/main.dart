@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
   Future<String> initiateTransaction(String app) async {
     UpiIndia upi = new UpiIndia(
       app: app,
-      receiverUpiId: '8337976828@ybl',
+      receiverUpiId: 'tester@test',
       receiverName: 'Tester',
       transactionRefId: 'TestingId',
       transactionNote: 'Not actual. Just an example.',

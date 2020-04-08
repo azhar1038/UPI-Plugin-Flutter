@@ -7,7 +7,6 @@ Apps supported by this plugin are:
 * Google Pay
 * BHIM
 * PhonePe
-* Mi Pay
 * Amazon Pay
 * Truecaller
 * My Airtel
