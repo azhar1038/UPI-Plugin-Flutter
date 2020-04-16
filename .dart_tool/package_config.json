@@ -3,37 +3,37 @@
   "packages": [
     {
       "name": "archive",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/archive-2.0.11",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/archive-2.0.13",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
     {
       "name": "args",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/args-1.5.2",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/args-1.6.0",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.3"
     },
     {
       "name": "async",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.4.0",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/async-2.4.1",
       "packageUri": "lib/",
-      "languageVersion": "2.0"
+      "languageVersion": "2.2"
     },
     {
       "name": "boolean_selector",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-1.0.5",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/boolean_selector-2.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.4"
+    },
+    {
+      "name": "charcode",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
     {
-      "name": "charcode",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/charcode-1.1.2",
-      "packageUri": "lib/",
-      "languageVersion": "1.0"
-    },
-    {
       "name": "collection",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.11",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/collection-1.14.12",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
@@ -45,7 +45,7 @@
     },
     {
       "name": "crypto",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.1.3",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/crypto-2.1.4",
       "packageUri": "lib/",
       "languageVersion": "2.1"
     },
@@ -63,7 +63,7 @@
     },
     {
       "name": "image",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/image-2.1.4",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/image-2.1.12",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
@@ -93,7 +93,7 @@
     },
     {
       "name": "quiver",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.0.5",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/quiver-2.1.3",
       "packageUri": "lib/",
       "languageVersion": "2.0"
     },
@@ -105,9 +105,9 @@
     },
     {
       "name": "source_span",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.5.5",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/source_span-1.7.0",
       "packageUri": "lib/",
-      "languageVersion": "1.8"
+      "languageVersion": "2.6"
     },
     {
       "name": "stack_trace",
@@ -153,9 +153,9 @@
     },
     {
       "name": "xml",
-      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/xml-3.5.0",
+      "rootUri": "file:///home/azhar/Android/flutter/.pub-cache/hosted/pub.dartlang.org/xml-3.6.1",
       "packageUri": "lib/",
-      "languageVersion": "2.3"
+      "languageVersion": "2.6"
     },
     {
       "name": "upi_india",
@@ -164,7 +164,7 @@
       "languageVersion": "2.1"
     }
   ],
-  "generated": "2020-04-08T06:07:33.353944Z",
+  "generated": "2020-04-16T15:03:59.851073Z",
   "generator": "pub",
-  "generatorVersion": "2.8.0-dev.12.0.flutter-9983424a3c"
+  "generatorVersion": "2.8.0-dev.18.0.flutter-eea9717938"
 }

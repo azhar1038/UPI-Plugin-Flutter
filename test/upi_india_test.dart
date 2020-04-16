@@ -16,14 +16,16 @@ void main() {
   });
 
   test('getPlatformVersion', () async {
-    UpiIndia upi = UpiIndia(
-        app: UpiIndiaApps.PhonePe,
-        receiverUpiId: "9078600498@ybl",
-        receiverName: "Md Azharuddin",
-        transactionRefId: "AzTest123",
-        transactionNote: "Test Transfer",
-        amount: 1.00,
-      );
-    expect(await upi.startTransaction(), '42');
+    UpiIndia upi = UpiIndia();
+    expect(
+        await upi.startTransaction(
+          app: UpiIndiaApp.PhonePe,
+          receiverUpiId: "9078600498@ybl",
+          receiverName: "Md Azharuddin",
+          transactionRefId: "AzTest123",
+          transactionNote: "Test Transfer",
+          amount: 1.00,
+        ),
+        '42');
   });
 }

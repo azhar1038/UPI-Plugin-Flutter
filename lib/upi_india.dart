@@ -3,61 +3,74 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:upi_india/upi_india_app.dart';
+import 'package:upi_india/upi_india_response.dart';
+
+export 'package:upi_india/upi_india_app.dart';
+export 'package:upi_india/upi_india_response.dart';
 
 // This is the main class.
 class UpiIndia {
-  static const MethodChannel _channel = const MethodChannel('upi_india');
+  static MethodChannel _channel;
 
-  /// app refers to app name provided using [UpiIndiaApps] class.
-  final String app;
+  UpiIndia() {
+    _channel = const MethodChannel('com.az.upi_india');
+  }
 
-  /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
-  /// Double check this value or you may end up paying the wrong person.
-  final String receiverUpiId;
+  /// This method will return the [List] of all apps in users device which can handle UPI Intents as [UpiIndiaApp]
+  Future<List<UpiIndiaApp>> getAllUpiApps() async {
+    final List<Map> apps =
+        await _channel.invokeListMethod<Map>('getAllUpiApps');
+    List<UpiIndiaApp> upiIndiaApps = [];
+    apps.forEach((app) {
+      upiIndiaApps.add(UpiIndiaApp.fromMap(Map<String, dynamic>.from(app)));
+    });
+    return upiIndiaApps;
+  }
 
-  /// receiverName is the name of the Payee( who will receive the  money)
-  final String receiverName;
+  /// This method is used to initiate a transaction with given parameters.
+  Future<UpiIndiaResponse> startTransaction({
+    /// app refers to app name provided using [UpiIndiaApps] class.
+    @required String app,
 
-  /// transactionNote provides short description of transaction.
-  final String transactionNote;
+    /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
+    /// Double check this value or you may end up paying the wrong person.
+    @required String receiverUpiId,
 
-  /// amount is the actual amount in decimal format (in INR by default) that should be paid.
-  /// amount = 0 if you want user to enter the amount.
-  final double amount;
+    /// receiverName is the name of the Payee( who will receive the  money)
+    @required String receiverName,
 
-  /// transactionRefId is a unique literal which you can use to find the transaction later easily.
-  /// It is mandatory for Merchant transactions and dynamic URL generation.
-  /// In response the "txnRef" that you will receive must match this value.
-  final String transactionRefId;
+    /// transactionNote provides short description of transaction.
+    @required String transactionNote,
 
-  /// currency refers to the currency code. Currently only "INR" is supported by UPI.
-  final String currency;
+    /// amount is the actual amount in decimal format (in INR by default) that should be paid.
+    /// amount = 0 if you want user to enter the amount.
+    @required double amount,
 
-  /// url when used, MUST BE related to the particular transaction and
-  /// MUST NOT be used to send unsolicited information that are not relevant to the transaction.
-  final String url;
+    // transactionRefId is a unique literal which you can use to find the transaction later easily.
+    /// It is mandatory for Merchant transactions and dynamic URL generation.
+    /// In response the "txnRef" that you will receive must match this value.
+    String transactionRefId,
 
-  /// Payee merchant code. If present then needs to be passed as it is.
-  final String merchantId;
+    /// currency refers to the currency code. Currently only "INR" is supported by UPI.
+    String currency = "INR",
 
-  UpiIndia({
-    @required this.app,
-    @required this.receiverUpiId,
-    @required this.receiverName,
-    @required this.transactionNote,
-    @required this.amount,
-    this.transactionRefId,
-    this.currency = "INR",
-    this.url,
-    this.merchantId,
-  })  : assert(receiverUpiId.contains(RegExp(r'\w+@\w+'))),
-        assert(amount >= 0 && amount.isFinite),
-        assert(currency == "INR"),// For now
-        assert((merchantId != null && transactionRefId != null) ||
-            merchantId == null);
+    /// url when used, MUST BE related to the particular transaction and
+    /// MUST NOT be used to send unsolicited information that are not relevant to the transaction.
+    String url,
 
-  Future<String> startTransaction() async {
-    final String response = await _channel.invokeMethod('startTransaction', {
+    /// Payee merchant code. If present then needs to be passed as it is.
+    String merchantId,
+  }) {
+    // Assertions start
+    assert(receiverUpiId.contains(RegExp(r'\w+@\w+')));
+    assert(amount >= 0 && amount.isFinite);
+    assert(currency == "INR");
+    assert(
+        (merchantId != null && transactionRefId != null) || merchantId == null);
+    // Assertions stop
+
+    return _channel.invokeMethod('startTransaction', {
       "app": app,
       'receiverUpiId': receiverUpiId,
       'receiverName': receiverName,
@@ -66,106 +79,12 @@ class UpiIndia {
       'amount': amount.toString(),
       'currency': currency,
       'merchantId': merchantId,
-    }).catchError((error){
-      print(error);
-      return 'invalid_parameters';
+    }).then((response) {
+      print("UPI_INDIA_FINAL_RESPONSE: $response");
+      return UpiIndiaResponse(response);
+    }).catchError((e) {
+      print("UPI_INDIA_FINAL_RESPONSE: invalid_parameters");
+      return UpiIndiaResponse('invalid_parameters');
     });
-    print('UPI_INDIA_FINAL_RESPONSE: $response');
-    return response;
   }
 }
-
-// List of UPI apps supported by this plugin
-// It is advised to use this class to pass the 'app' value of [UpiIndia].
-class UpiIndiaApps {
-  static const String PayTM = "net.one97.paytm";
-  static const String GooglePay = "com.google.android.apps.nbu.paisa.user";
-  static const String BHIMUPI = "in.org.npci.upiapp";
-  static const String PhonePe = "com.phonepe.app";
-  // static const String MiPay = "com.mipay.in.wallet";
-  static const String AmazonPay = "in.amazon.mShop.android.shopping";
-  static const String TrueCallerUPI = "com.truecaller";
-  static const String MyAirtelUPI = "com.myairtelapp";
-  static const String MobikwikUPI = "com.mobikwik_new";
-  static const String FreeChargeUPI = "com.freecharge.android";
-}
-
-// Class to process the response of upi request.
-class UpiIndiaResponse {
-  /// It is the Transaction ID from the response.
-  String transactionId;
-
-  /// responseCode is the UPI Response code. You don't particularly need to use this.
-  /// You may refer to https://ncpi.org.in for list of responseCode.
-  String responseCode;
-
-  /// approvalRefNo is the UPI Approval reference number (beneficiary).
-  /// It is optional. You may receive it as null.
-  String approvalRefNo;
-
-  /// status gives the status of Transaction.
-  /// There are three approved status: success, failure, submitted.
-  /// DO NOT use the string directly. Instead use [UpiIndiaResponseStatus]
-  String status;
-
-  /// txnRef gives the Transaction Reference ID passed in input.
-  String transactionRefId;
-
-  UpiIndiaResponse(String responseString) {
-    List<String> _parts = responseString.split('&');
-
-    for (int i = 0; i < _parts.length; ++i) {
-      String key = _parts[i].split('=')[0];
-      String value = _parts[i].split('=')[1];
-      if (key.toLowerCase() == "txnid") {
-        transactionId = value;
-      } else if (key.toLowerCase() == "responsecode") {
-        responseCode = value;
-      } else if (key.toLowerCase() == "approvalrefno") {
-        approvalRefNo = value;
-      } else if (key.toLowerCase() == "status") {
-        if(value.toLowerCase() == "success") status = "success";
-        else if(value.toLowerCase().contains("fail")) status = "failure";
-        else if(value.toLowerCase().contains("submit")) status = "submitted";
-        else status = "other";
-      } else if (key.toLowerCase() == "txnref") {
-        transactionRefId = value;
-      }
-    }
-  }
-}
-
-// This class is to match the status of transaction.
-// It is advised to use this class to compare the status rather than doing string comparision.
-class UpiIndiaResponseStatus {
-  /// SUCCESS occurs when transaction completes successfully.
-  static const String SUCCESS = 'success';
-
-  /// SUBMITTED occurs when transaction remains in pending state.
-  static const String SUBMITTED = 'submitted';
-
-  // Deprecated! Don't use it. Use FAILURE instead.
-  //static const String FAILED = 'failure';
-
-  /// FAILURE occurs when transaction fails or user cancels it in the middle.
-  static const String FAILURE = 'failure';
-
-  /// In case status is not any of the three accepted value (by chance).
-  static const String OTHER = 'other';
-}
-
-// Class that contains error responses that must be used to check for errors.
-class UpiIndiaResponseError{
-  /// When user selects app to make transaction but the app is not installed.
-  static const String APP_NOT_INSTALLED = 'app_not_installed';
-
-  /// When the parameters of UPI request is/are invalid or app cannot proceed with the payment.
-  static const String INVALID_PARAMETERS = 'invalid_parameters';
-
-  /// Failed to receive any response from the invoked activity.
-  static const String NULL_RESPONSE = 'null_response';
-
-  /// User cancelled the transaction.
-  static const String USER_CANCELLED = 'user_canceled';
-}
-
