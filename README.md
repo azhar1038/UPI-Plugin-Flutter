@@ -15,8 +15,6 @@ For a complete example of how to use this plugin, look at the **Example** tab or
     <td><img src="./images/show.gif" alt="How example looks" width="200"></td>
   </tr>
 </table>
-<img src="./images/success.jpg" alt="Success Status" width="200">
-<img src="./images/show.gif" alt="How example looks" width="200">
 
 ## Classes to know
 1. **UpiIndia** - It is the main class containing two methods:
