@@ -108,6 +108,7 @@ switch (_upiResponse.error) {
   case UpiError.USER_CANCELLED:
     print("You cancelled the transaction");
     break;
+  }
 }
 ```
 
