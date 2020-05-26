@@ -1,5 +1,5 @@
 // Class to process the response of upi request.
-class UpiIndiaResponse {
+class UpiResponse {
   /// It is the Transaction ID from the response.
   String transactionId;
 
@@ -13,7 +13,7 @@ class UpiIndiaResponse {
 
   /// status gives the status of Transaction.
   /// There are three approved status: success, failure, submitted.
-  /// DO NOT use the string directly. Instead use [UpiIndiaResponseStatus]
+  /// DO NOT use the string directly. Instead use [UpiStatus]
   String status;
 
   /// txnRef gives the Transaction Reference ID passed in input.
@@ -21,10 +21,10 @@ class UpiIndiaResponse {
 
   /// If any error occurs it is stored in error.
   /// IMPORTANT: Always check this before further checking others.
-  /// Use [UpiIndiaResponseError] to check different type of errors.
+  /// Use [UpiError] to check different type of errors.
   String error;
 
-  UpiIndiaResponse(String responseString) {
+  UpiResponse(String responseString) {
     List<String> _parts = responseString.split('&');
     if (_parts.length == 1) {
       error = _parts[0];
@@ -58,7 +58,7 @@ class UpiIndiaResponse {
 
 // This class is to match the status of transaction.
 // It is advised to use this class to compare the status rather than doing string comparision.
-class UpiIndiaResponseStatus {
+class UpiStatus {
   /// SUCCESS occurs when transaction completes successfully.
   static const String SUCCESS = 'success';
 
@@ -73,7 +73,7 @@ class UpiIndiaResponseStatus {
 }
 
 // Class that contains error responses that must be used to check for errors.
-class UpiIndiaResponseError{
+class UpiError{
   /// When user selects app to make transaction but the app is not installed.
   static const String APP_NOT_INSTALLED = 'app_not_installed';
 

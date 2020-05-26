@@ -3,11 +3,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:upi_india/upi_india_app.dart';
-import 'package:upi_india/upi_india_response.dart';
+import 'package:upi_india/upi_app.dart';
+import 'package:upi_india/upi_response.dart';
 
-export 'package:upi_india/upi_india_app.dart';
-export 'package:upi_india/upi_india_response.dart';
+export 'package:upi_india/upi_app.dart';
+export 'package:upi_india/upi_response.dart';
 
 // This is the main class.
 class UpiIndia {
@@ -18,19 +18,19 @@ class UpiIndia {
   }
 
   /// This method will return the [List] of all apps in users device which can handle UPI Intents as [UpiIndiaApp]
-  Future<List<UpiIndiaApp>> getAllUpiApps() async {
+  Future<List<UpiApp>> getAllUpiApps() async {
     final List<Map> apps =
         await _channel.invokeListMethod<Map>('getAllUpiApps');
-    List<UpiIndiaApp> upiIndiaApps = [];
+    List<UpiApp> upiIndiaApps = [];
     apps.forEach((app) {
-      upiIndiaApps.add(UpiIndiaApp.fromMap(Map<String, dynamic>.from(app)));
+      upiIndiaApps.add(UpiApp.fromMap(Map<String, dynamic>.from(app)));
     });
     return upiIndiaApps;
   }
 
   /// This method is used to initiate a transaction with given parameters.
-  Future<UpiIndiaResponse> startTransaction({
-    /// app refers to app name provided using [UpiIndiaApps] class.
+  Future<UpiResponse> startTransaction({
+    /// app refers to app name provided using [UpiApp] class.
     @required String app,
 
     /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
@@ -81,10 +81,10 @@ class UpiIndia {
       'merchantId': merchantId,
     }).then((response) {
       print("UPI_INDIA_FINAL_RESPONSE: $response");
-      return UpiIndiaResponse(response);
+      return UpiResponse(response);
     }).catchError((e) {
       print("UPI_INDIA_FINAL_RESPONSE: invalid_parameters");
-      return UpiIndiaResponse('invalid_parameters');
+      return UpiResponse('invalid_parameters');
     });
   }
 }

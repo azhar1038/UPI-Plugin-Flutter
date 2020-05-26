@@ -19,7 +19,7 @@ void main() {
     UpiIndia upi = UpiIndia();
     expect(
         await upi.startTransaction(
-          app: UpiIndiaApp.PhonePe,
+          app: UpiApp.PhonePe,
           receiverUpiId: "9078600498@ybl",
           receiverName: "Md Azharuddin",
           transactionRefId: "AzTest123",

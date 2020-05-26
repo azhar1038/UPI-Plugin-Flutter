@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 /// This is the model class of apps returned by [getAllUpiApps()].
 /// This class contains some predefined package names of UPI apps.
-class UpiIndiaApp {
+class UpiApp {
   /// app is the package name of the app. Pass this in [app] argument of [startTransaction]
   String app;
 
@@ -51,7 +51,7 @@ class UpiIndiaApp {
   static const String IMobileICICI = "com.csam.icici.bank.imobile";
   // End of pre-defined package names
 
-  UpiIndiaApp.fromMap(Map<String, dynamic> m) {
+  UpiApp.fromMap(Map<String, dynamic> m) {
     app = m['packageName'];
     name = m['name'];
     icon = m['icon'];

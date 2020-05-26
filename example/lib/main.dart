@@ -19,9 +19,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<UpiIndiaResponse> _transaction;
+  Future<UpiResponse> _transaction;
   UpiIndia _upiIndia = UpiIndia();
-  List<UpiIndiaApp> apps;
+  List<UpiApp> apps;
 
   @override
   void initState() {
@@ -33,12 +33,12 @@ class _HomePageState extends State<HomePage> {
     super.initState();
   }
 
-  Future<UpiIndiaResponse> initiateTransaction(String app) async {
+  Future<UpiResponse> initiateTransaction(String app) async {
     return _upiIndia.startTransaction(
       app: app,
-      receiverUpiId: 'tester@test',
-      receiverName: 'Tester',
-      transactionRefId: 'TestingId',
+      receiverUpiId: '9078600498@ybl',
+      receiverName: 'Md Azharuddin',
+      transactionRefId: 'TestingUpiIndiaPlugin',
       transactionNote: 'Not actual. Just an example.',
       amount: 1.00,
     );
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
     else
       return Center(
         child: Wrap(
-          children: apps.map<Widget>((UpiIndiaApp app) {
+          children: apps.map<Widget>((UpiApp app) {
             return GestureDetector(
               onTap: () {
                 _transaction = initiateTransaction(app.app);
@@ -94,26 +94,26 @@ class _HomePageState extends State<HomePage> {
             child: FutureBuilder(
               future: _transaction,
               builder: (BuildContext context,
-                  AsyncSnapshot<UpiIndiaResponse> snapshot) {
+                  AsyncSnapshot<UpiResponse> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
                     return Center(child: Text('An Unknown error has occured'));
                   }
-                  UpiIndiaResponse _upiResponse;
+                  UpiResponse _upiResponse;
                   _upiResponse = snapshot.data;
                   if (_upiResponse.error != null) {
                     String text = '';
                     switch (snapshot.data.error) {
-                      case UpiIndiaResponseError.APP_NOT_INSTALLED:
+                      case UpiError.APP_NOT_INSTALLED:
                         text = "Requested app not installed on device";
                         break;
-                      case UpiIndiaResponseError.INVALID_PARAMETERS:
+                      case UpiError.INVALID_PARAMETERS:
                         text = "Requested app cannot handle the transaction";
                         break;
-                      case UpiIndiaResponseError.NULL_RESPONSE:
+                      case UpiError.NULL_RESPONSE:
                         text = "requested app didn't returned any response";
                         break;
-                      case UpiIndiaResponseError.USER_CANCELLED:
+                      case UpiError.USER_CANCELLED:
                         text = "You cancelled the transaction";
                         break;
                     }
@@ -127,13 +127,13 @@ class _HomePageState extends State<HomePage> {
                   String status = _upiResponse.status;
                   String approvalRef = _upiResponse.approvalRefNo;
                   switch (status) {
-                    case UpiIndiaResponseStatus.SUCCESS:
+                    case UpiStatus.SUCCESS:
                       print('Transaction Successful');
                       break;
-                    case UpiIndiaResponseStatus.SUBMITTED:
+                    case UpiStatus.SUBMITTED:
                       print('Transaction Submitted');
                       break;
-                    case UpiIndiaResponseStatus.FAILURE:
+                    case UpiStatus.FAILURE:
                       print('Transaction Failed');
                       break;
                     default:

@@ -1,3 +1,12 @@
+## 2.1.0
+**Breaking Change** Names of classes have been changed to make them more concise.
+
+* **UpiIndiaApp** has been renamed to **UpiApp**
+* **UpiIndiaResponse** has been renamed to **UpiResponse**
+* **UpiIndiaResponseStatus** has been renamed to **UpiStatus**
+* **UpiIndiaResponseError** has been renamed to **UpiError**
+
+
 ## 2.0.0
 **Breaking Change** Whole way to use this plugin has changed. Some major changes are:
 
