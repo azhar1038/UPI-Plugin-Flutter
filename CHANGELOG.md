@@ -1,4 +1,4 @@
-## 2.1.1+1
+## 2.1.2
 **Breaking Change** Names of classes have been changed to make them more concise.
 
 * **UpiIndiaApp** has been renamed to **UpiApp**
