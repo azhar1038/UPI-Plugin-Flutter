@@ -11,7 +11,7 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 
 <table>
   <tr>
-    <td><img src="./images/success.jpg" alt="Success Status" width="200"></td>
+    <td><img src="https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/images/success.jpg" alt="Success Status" width="200"></td>
     <td><img src="./images/show.gif" alt="How example looks" width="200"></td>
   </tr>
 </table>
