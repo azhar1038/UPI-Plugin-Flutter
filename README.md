@@ -11,8 +11,8 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 
 <table>
   <tr>
-    <td><img src="https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/images/success.jpg" alt="Success Status" width="200"></td>
-    <td><img src="https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/images/show.gif" alt="How example looks" width="200"></td>
+    <td><img src="https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/images/success.jpg" alt="Success Status" width="200" height="360"></td>
+    <td><img src="https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/images/show.gif" alt="How example looks" width="200" height="360"></td>
   </tr>
 </table>
 
@@ -24,7 +24,7 @@ getAllUpiApps(),  startTransaction()
 
 3. **UpiResponse** - You will use this to get response from the requested app.
 
-4. **UpiStatus** - Use this to see if transaction was a success or not.
+4. **UpiPaymentStatus** - Use this to see if transaction was a success or not.
 
 5. **UpiError** - This class contains some common errors which you may encounter.
 ***
@@ -125,9 +125,9 @@ If **_upiResponse.error** is null, you can then get these parameters from it:
 
 ### Step 3:
 Check the Status property. It has following values:
-* UpiStatus.SUCCESS
-* UpiStatus.SUBMITTED
-* UpiStatus.FAILURE
+* UpiPaymentStatus.SUCCESS
+* UpiPaymentStatus.SUBMITTED
+* UpiPaymentStatus.FAILURE
 
 If Status is SUCCESS, Congratulations! You have successfully used this plugin.
 ***

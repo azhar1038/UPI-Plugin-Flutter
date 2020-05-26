@@ -127,13 +127,13 @@ class _HomePageState extends State<HomePage> {
                   String status = _upiResponse.status;
                   String approvalRef = _upiResponse.approvalRefNo;
                   switch (status) {
-                    case UpiStatus.SUCCESS:
+                    case UpiPaymentStatus.SUCCESS:
                       print('Transaction Successful');
                       break;
-                    case UpiStatus.SUBMITTED:
+                    case UpiPaymentStatus.SUBMITTED:
                       print('Transaction Submitted');
                       break;
-                    case UpiStatus.FAILURE:
+                    case UpiPaymentStatus.FAILURE:
                       print('Transaction Failed');
                       break;
                     default:

@@ -1,10 +1,11 @@
-## 2.1.0
+## 2.1.1+1
 **Breaking Change** Names of classes have been changed to make them more concise.
 
 * **UpiIndiaApp** has been renamed to **UpiApp**
 * **UpiIndiaResponse** has been renamed to **UpiResponse**
-* **UpiIndiaResponseStatus** has been renamed to **UpiStatus**
+* **UpiIndiaResponseStatus** has been renamed to **UpiPaymentStatus**
 * **UpiIndiaResponseError** has been renamed to **UpiError**
+* Modified Readme.
 
 
 ## 2.0.0

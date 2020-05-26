@@ -58,7 +58,7 @@ class UpiResponse {
 
 // This class is to match the status of transaction.
 // It is advised to use this class to compare the status rather than doing string comparision.
-class UpiStatus {
+class UpiPaymentStatus {
   /// SUCCESS occurs when transaction completes successfully.
   static const String SUCCESS = 'success';
 
