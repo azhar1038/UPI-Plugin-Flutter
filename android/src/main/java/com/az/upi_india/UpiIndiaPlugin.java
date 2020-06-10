@@ -158,6 +158,11 @@ public class UpiIndiaPlugin implements MethodCallHandler, PluginRegistry.Activit
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri.Builder uriBuilder = new Uri.Builder();
         uriBuilder.scheme("upi").authority("pay");
+        uriBuilder.appendQueryParameter("pa", "test@ybl");
+        uriBuilder.appendQueryParameter("pn", "Test");
+        uriBuilder.appendQueryParameter("tn", "Get All Apps");
+        uriBuilder.appendQueryParameter("am", "1.0");
+        uriBuilder.appendQueryParameter("cr", "INR");
         Uri uri = uriBuilder.build();
         intent.setData(uri);
         PackageManager pm = activity.getPackageManager();
