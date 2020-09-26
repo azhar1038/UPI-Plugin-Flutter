@@ -14,13 +14,12 @@ class UpiIndia {
   static MethodChannel _channel;
 
   UpiIndia() {
-    _channel = const MethodChannel('com.az.upi_india');
+    _channel = const MethodChannel('upi_india');
   }
 
   /// This method will return the [List] of all apps in users device which can handle UPI Intents as [UpiIndiaApp]
   Future<List<UpiApp>> getAllUpiApps() async {
-    final List<Map> apps =
-        await _channel.invokeListMethod<Map>('getAllUpiApps');
+    final List<Map> apps = await _channel.invokeListMethod<Map>('getAllUpiApps');
     List<UpiApp> upiIndiaApps = [];
     apps.forEach((app) {
       upiIndiaApps.add(UpiApp.fromMap(Map<String, dynamic>.from(app)));
