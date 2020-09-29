@@ -9,6 +9,53 @@ import 'package:upi_india/upi_response.dart';
 export 'package:upi_india/upi_app.dart';
 export 'package:upi_india/upi_response.dart';
 
+List<String> _validApps = [
+  UpiApp.airtelThanksUpi.packageName, //Sends back empty transaction data
+  UpiApp.allBank.packageName,
+  UpiApp.amazonPay.packageName,
+//  UpiApp.auPay.packageName,
+  UpiApp.axisPay.packageName,
+//  UpiApp.bandhanUpi.packageName,
+  UpiApp.barodaPay.packageName,
+  UpiApp.bhim.packageName,
+//  UpiApp.boiUpi.packageName,
+//  UpiApp.candi.packageName,
+  UpiApp.centUpi.packageName,
+  UpiApp.cointab.packageName,
+  UpiApp.corpUpi.packageName,
+//  UpiApp.csbUpi.packageName,
+  UpiApp.dcbUpi.packageName,
+  UpiApp.finoBPay.packageName,
+  UpiApp.freecharge.packageName,
+  UpiApp.googlePay.packageName,
+//  UpiApp.hsbcSimplyPay.packageName,
+  UpiApp.iMobileICICI.packageName,
+//  UpiApp.indianBankUpi.packageName,
+  UpiApp.indusPay.packageName,
+//  UpiApp.jetPay.packageName,
+//  UpiApp.kblUpi.packageName,
+  UpiApp.khaaliJeb.packageName,
+//  UpiApp.kvbUpay.packageName,
+//  UpiApp.lvbUpaay.packageName,
+  UpiApp.mahaUpi.packageName,
+  UpiApp.miPayGlobal.packageName, // Null transaction Id
+  UpiApp.miPayXiaomi.packageName, // Null transaction Id
+  UpiApp.mobikwik.packageName,
+  UpiApp.orientalPay.packageName,
+  UpiApp.paytm.packageName,
+  UpiApp.paywiz.packageName,
+  UpiApp.phonePe.packageName,
+  UpiApp.psb.packageName,
+//  UpiApp.rblPay.packageName,
+  UpiApp.sbiPay.packageName,
+//  UpiApp.syndUpi.packageName,
+  UpiApp.trueCallerUPI.packageName, // Repetitive mobile verification SMS failures
+//  UpiApp.ucoUpi.packageName,
+//  UpiApp.ultraCash.packageName,
+//  UpiApp.vijayaUpi.packageName,
+  UpiApp.yesPay.packageName,
+];
+
 // This is the main class.
 class UpiIndia {
   static MethodChannel _channel;
