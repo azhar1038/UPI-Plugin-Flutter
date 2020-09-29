@@ -8,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -74,14 +75,16 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
     private void getAllUpiApps() {
         List<Map<String, Object>> packages = new ArrayList<>();
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        Uri.Builder uriBuilder = new Uri.Builder();
-        uriBuilder.scheme("upi").authority("pay");
-        uriBuilder.appendQueryParameter("pa", "test@ybl");
-        uriBuilder.appendQueryParameter("pn", "Test");
-        uriBuilder.appendQueryParameter("tn", "Get All Apps");
-        uriBuilder.appendQueryParameter("am", "1.0");
-        uriBuilder.appendQueryParameter("cr", "INR");
-        Uri uri = uriBuilder.build();
+//        Uri.Builder uriBuilder = new Uri.Builder();
+//        uriBuilder.scheme("upi").authority("pay");
+//        uriBuilder.appendQueryParameter("pa", "test@ybl");
+//        uriBuilder.appendQueryParameter("pn", "Test");
+//        uriBuilder.appendQueryParameter("tn", "Get All Apps");
+//        uriBuilder.appendQueryParameter("am", "1.0");
+//        uriBuilder.appendQueryParameter("cr", "INR");
+//        Uri uri = uriBuilder.build();
+        String uriString = "upi://pay?pa=test@upi&pn=Test&tn=GetAllApps&am=10.00&cu=INR&mode=04";
+        Uri uri = Uri.parse(uriString);
         intent.setData(uri);
         if (activity == null) {
             finalResult.error("ACTIVITY_MISSING", "No attached activity found!", null);
@@ -155,27 +158,18 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
 
         // Build the query and initiate the transaction.
         try {
-            Uri.Builder uriBuilder = new Uri.Builder();
-            uriBuilder.scheme("upi").authority("pay");
-            uriBuilder.appendQueryParameter("pa", receiverUpiId);
-            uriBuilder.appendQueryParameter("pn", receiverName);
-            uriBuilder.appendQueryParameter("tn", transactionNote);
-            uriBuilder.appendQueryParameter("am", amount);
-            if (transactionRefId != null) {
-                uriBuilder.appendQueryParameter("tr", transactionRefId);
-            }
-            if (currency == null) {
-                uriBuilder.appendQueryParameter("cr", "INR");
-            } else
-                uriBuilder.appendQueryParameter("cu", currency);
-            if (url != null) {
-                uriBuilder.appendQueryParameter("url", url);
-            }
-            if (merchantId != null) {
-                uriBuilder.appendQueryParameter("mc", merchantId);
-            }
+            String uriString = "upi://pay?pa="+receiverUpiId+
+                    "&pn="+Uri.encode(receiverName)+
+                    "&am="+Uri.encode(amount);
+            if (transactionNote != null) uriString += "&tn=" + transactionNote;
+            if (transactionRefId != null) uriString += "&tr=" + transactionRefId;
+            if (currency == null) uriString += "&cu=INR";
+            else uriString += "&cu="+currency;
+            if (url != null) uriString += "&url=" + url;
+            if (merchantId != null) uriString += "&mc" + merchantId;
+            uriString += "&mode=04";
 
-            Uri uri = uriBuilder.build();
+            Uri uri = Uri.parse(uriString);
 
             // Built Query. Ready to call intent.
             Intent intent = new Intent(Intent.ACTION_VIEW);
@@ -185,13 +179,13 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
             if (isAppInstalled(app)) {
                 activity.startActivityForResult(intent, uniqueRequestCode);
             } else {
-                Log.d("UpiIndia NOTE: ", app + " not installed on the device.");
+                Log.d(TAG, app + " not installed on the device.");
                 resultReturned = true;
                 finalResult.success("app_not_installed");
             }
         } catch (Exception ex) {
             resultReturned = true;
-            Log.d("UpiIndia NOTE: ", "" + ex);
+            Log.d(TAG, "" + ex);
             finalResult.error("FAILED", "invalid_parameters", null);
         }
     }
@@ -204,39 +198,39 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
             return true;
         } catch (PackageManager.NameNotFoundException pme) {
             pme.printStackTrace();
-            Log.e("UpiIndia ERROR: ", "" + pme);
+            Log.e(TAG, "" + pme);
         }
         return false;
     }
 
     @Override
     public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
-        Log.d("UpiIndia Internal: ", "Detaching from engine");
+        Log.d(TAG, "Detaching from engine");
         channel.setMethodCallHandler(null);
     }
 
     @Override
     public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-        Log.d("UpiIndia Internal: ", "Attaching to Activity");
+        Log.d(TAG, "Attaching to Activity");
         activity = binding.getActivity();
         binding.addActivityResultListener(this);
     }
 
     @Override
     public void onDetachedFromActivityForConfigChanges() {
-        Log.d("UpiIndia Internal: ", "Detaching from Activity for config changes");
+        Log.d(TAG, "Detaching from Activity for config changes");
         activity = null;
     }
 
     @Override
     public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
-        Log.d("UpiIndia Internal: ", "Reattaching to Activity for config changes");
+        Log.d(TAG, "Reattaching to Activity for config changes");
         activity = binding.getActivity();
     }
 
     @Override
     public void onDetachedFromActivity() {
-        Log.d("UpiIndia Internal: ", "Detached from Activity");
+        Log.d(TAG, "Detached from Activity");
         activity = null;
     }
 
@@ -246,12 +240,13 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
             if (data != null) {
                 try {
                     String response = data.getStringExtra("response");
+                    Log.d(TAG, "RAW RESPONSE FROM REQUESTED APP: "+response);
                     if (!resultReturned) finalResult.success(response);
                 } catch (Exception ex) {
                     if (!resultReturned) finalResult.success("null_response");
                 }
             } else {
-                Log.d("UpiIndia NOTE: ", "Received NULL, User cancelled the transaction.");
+                Log.d(TAG, "Received NULL, User cancelled the transaction.");
                 if (!resultReturned) finalResult.success("user_canceled");
             }
         }
