@@ -1,4 +1,6 @@
 // Class to process the response of upi request.
+import 'package:upi_india/upi_exception.dart';
+
 class UpiResponse {
   /// It is the Transaction ID from the response.
   String transactionId;
@@ -19,40 +21,48 @@ class UpiResponse {
   /// txnRef gives the Transaction Reference ID passed in input.
   String transactionRefId;
 
-  /// If any error occurs it is stored in error.
-  /// IMPORTANT: Always check this before further checking others.
-  /// Use [UpiError] to check different type of errors.
-  String error;
+//  /// If any error occurs it is stored in error.
+//  /// IMPORTANT: Always check this before further checking others.
+//  /// Use [UpiError] to check different type of errors.
+//  String error;
 
   UpiResponse(String responseString) {
     List<String> _parts = responseString.split('&');
-    if (_parts.length == 1) {
-      error = _parts[0];
-    } else {
-      error = null;
-      for (int i = 0; i < _parts.length; ++i) {
-        String key = _parts[i].split('=')[0];
-        String value = _parts[i].split('=')[1];
-        if (key.toLowerCase() == "txnid") {
-          transactionId = value;
-        } else if (key.toLowerCase() == "responsecode") {
-          responseCode = value;
-        } else if (key.toLowerCase() == "approvalrefno") {
-          approvalRefNo = value;
-        } else if (key.toLowerCase() == "status") {
-          if (value.toLowerCase() == "success")
-            status = "success";
-          else if (value.toLowerCase().contains("fail"))
-            status = "failure";
-          else if (value.toLowerCase().contains("submit"))
-            status = "submitted";
-          else
-            status = "other";
-        } else if (key.toLowerCase() == "txnref") {
-          transactionRefId = value;
-        }
+//    if (_parts.length == 1) {
+//      error = _parts[0];
+//      if(error == "app_not_installed") throw UpiIndiaAppNotInstalledException();
+//      else if(error == "invalid_parameters") throw UpiIndiaInvalidParametersException();
+//      else if(error == "null_response") throw UpiIndiaNullResponseException();
+//      else if(error == "user_canceled") throw UpiIndiaUserCancelledException();
+//    } else {
+//    error = null;
+    for (int i = 0; i < _parts.length; ++i) {
+      String key = _parts[i].split('=')[0];
+      String value = _parts[i].split('=')[1]??'';
+      if (key.toLowerCase() == "txnid") {
+        transactionId = value;
+        if (transactionId.isEmpty) transactionId = null;
+      } else if (key.toLowerCase() == "responsecode") {
+        responseCode = value;
+        if (responseCode.isEmpty) responseCode = null;
+      } else if (key.toLowerCase() == "approvalrefno") {
+        approvalRefNo = value;
+        if (approvalRefNo.isEmpty) approvalRefNo = null;
+      } else if (key.toLowerCase() == "status") {
+        if (value.toLowerCase().contains("success"))
+          status = "success";
+        else if (value.toLowerCase().contains("fail"))
+          status = "failure";
+        else if (value.toLowerCase().contains("submit"))
+          status = "submitted";
+        else
+          status = "other";
+      } else if (key.toLowerCase() == "txnref") {
+        transactionRefId = value;
+        if (transactionRefId.isEmpty) transactionRefId = null;
       }
     }
+//    }
   }
 }
 
@@ -71,18 +81,18 @@ class UpiPaymentStatus {
   /// In case status is not any of the three accepted value (by chance).
   static const String OTHER = 'other';
 }
-
-// Class that contains error responses that must be used to check for errors.
-class UpiError{
-  /// When user selects app to make transaction but the app is not installed.
-  static const String APP_NOT_INSTALLED = 'app_not_installed';
-
-  /// When the parameters of UPI request is/are invalid or app cannot proceed with the payment.
-  static const String INVALID_PARAMETERS = 'invalid_parameters';
-
-  /// Failed to receive any response from the invoked activity.
-  static const String NULL_RESPONSE = 'null_response';
-
-  /// User cancelled the transaction.
-  static const String USER_CANCELLED = 'user_canceled';
-}
+//
+//// Class that contains error responses that must be used to check for errors.
+//class UpiError{
+//  /// When user selects app to make transaction but the app is not installed.
+//  static const String APP_NOT_INSTALLED = 'app_not_installed';
+//
+//  /// When the parameters of UPI request is/are invalid or app cannot proceed with the payment.
+//  static const String INVALID_PARAMETERS = 'invalid_parameters';
+//
+//  /// Failed to receive any response from the invoked activity.
+//  static const String NULL_RESPONSE = 'null_response';
+//
+//  /// User cancelled the transaction.
+//  static const String USER_CANCELLED = 'user_canceled';
+//}

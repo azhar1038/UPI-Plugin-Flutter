@@ -15,7 +15,10 @@ enum _ValidUpiApps{
   cointab,
   corpUpi,
   csbUpi,
+  cubUpi,
+  digibank,
   dcbUpi,
+  equitasUpi,
   finoBPay,
   freecharge,
   googlePay,
@@ -26,6 +29,7 @@ enum _ValidUpiApps{
   jetPay,
   kblUpi,
   khaaliJeb,
+  kotak,
   kvbUpay,
   lvbUpaay,
   mahaUpi,
@@ -35,14 +39,18 @@ enum _ValidUpiApps{
   orientalPay,
   paytm,
   paywiz,
+  payZapp,
   phonePe,
+  pnb,
   psb,
   rblPay,
+  realmePaySa,
   sbiPay,
   syndUpi,
   trueCallerUpi,
   ucoUpi,
   ultraCash,
+  unitedUpiPay,
   vijayaUpi,
   yesPay,
 }
@@ -50,54 +58,22 @@ enum _ValidUpiApps{
 /// This is the model class of apps returned by [getAllUpiApps()].
 /// This class contains some predefined package names of UPI apps.
 class UpiApp {
-  // Start of pre-defined Apps supported by this plugin
-  /// Paytm(Paytm-One97 Communications Ltd.): net.one97.paytm
-  static UpiApp paytm = UpiApp._fromEnum(_ValidUpiApps.paytm);
 
-  /// Google Pay(GoogleLLC): com.google.android.apps.nbu.paisa.user
-  static UpiApp googlePay = UpiApp._fromEnum(_ValidUpiApps.googlePay);
-
-  /// BHIM(National Payments Corporation of India): in.org.npci.upiapp
-  static UpiApp bhim = UpiApp._fromEnum(_ValidUpiApps.bhim);
-
-  /// PhonePe: com.phonepe.app
-  static UpiApp phonePe = UpiApp._fromEnum(_ValidUpiApps.phonePe);
-
-  /// Mi Pay(Non Xiaomi devices): com.mipay.in.wallet (From Play Store)
-  static UpiApp miPayGlobal = UpiApp._fromEnum(_ValidUpiApps.miPayGlobal);
-
-  /// Mi Pay(Only Xiaomi devices): com.mipay.wallet.in (From Get Apps)
-  static UpiApp miPayXiaomi = UpiApp._fromEnum(_ValidUpiApps.miPayXiaomi);
-
-  /// Amazon(Amazon Mobile LLC): in.amazon.mShop.android.shopping
-  static UpiApp amazonPay = UpiApp._fromEnum(_ValidUpiApps.amazonPay);
-
-  /// Truecaller(True Software Scandinavia AB): com.truecaller
-  static UpiApp trueCallerUPI = UpiApp._fromEnum(_ValidUpiApps.trueCallerUpi);
-
+  // --------------------------Start of pre-defined Apps-------------------------------
   /// Airtel Thanks(Airtel): com.myairtelapp
   static UpiApp airtelThanksUpi = UpiApp._fromEnum(_ValidUpiApps.airtelThanksUpi);
-
-  /// Mobikwik: com.mobikwik_new
-  static UpiApp mobikwik = UpiApp._fromEnum(_ValidUpiApps.mobikwik);
-
-  /// Freecharge: com.freecharge.android
-  static UpiApp freecharge = UpiApp._fromEnum(_ValidUpiApps.freecharge);
-
-  /// BHIM SBI Pay(State Bank of India): com.sbi.upi
-  static UpiApp sbiPay = UpiApp._fromEnum(_ValidUpiApps.sbiPay);
-
-  /// iMobile(ICICI Bank Ltd.): com.csam.icici.bank.imobile
-  static UpiApp iMobileICICI = UpiApp._fromEnum(_ValidUpiApps.iMobileICICI);
-
-  /// BHIM Axis Pay(Axis Bank Ltd.): com.upi.axispay
-  static UpiApp axisPay = UpiApp._fromEnum(_ValidUpiApps.axisPay);
 
   /// BHIM ALLBANK UPI(Allahabad Bank): com.lcode.allahabadupi
   static UpiApp allBank = UpiApp._fromEnum(_ValidUpiApps.allBank);
 
+  /// Amazon(Amazon Mobile LLC): in.amazon.mShop.android.shopping
+  static UpiApp amazonPay = UpiApp._fromEnum(_ValidUpiApps.amazonPay);
+
   /// BHIM AUPay(AU Small Finance Bank Limited): com.aubank.aupay.bhimupi
   static UpiApp auPay = UpiApp._fromEnum(_ValidUpiApps.auPay);
+
+  /// BHIM Axis Pay(Axis Bank Ltd.): com.upi.axispay
+  static UpiApp axisPay = UpiApp._fromEnum(_ValidUpiApps.axisPay);
 
   /// BHIM Bandhan UPI(Bandhan Bank Limited): com.fisglobal.bandhanupi.app
   static UpiApp bandhanUpi = UpiApp._fromEnum(_ValidUpiApps.bandhanUpi);
@@ -105,11 +81,20 @@ class UpiApp {
   /// BHIM Baroda Pay(Bank of Baroda): com.bankofbaroda.upi
   static UpiApp barodaPay = UpiApp._fromEnum(_ValidUpiApps.barodaPay);
 
+  /// BHIM(National Payments Corporation of India): in.org.npci.upiapp
+  static UpiApp bhim = UpiApp._fromEnum(_ValidUpiApps.bhim);
+
   /// BHIM BOI UPI(Bank of India Official): com.infra.boiupi
   static UpiApp boiUpi= UpiApp._fromEnum(_ValidUpiApps.boiUpi);
 
+  /// CANDI-Mobile Banking App!(CANARA BANK): com.canarabank.mobility
+  static UpiApp candi = UpiApp._fromEnum(_ValidUpiApps.candi);
+
   /// BHIM Cent UPI(CENTRAL BANK OF INDIA): com.infrasofttech.centralbankupi
   static UpiApp centUpi = UpiApp._fromEnum(_ValidUpiApps.centUpi);
+
+  /// Cointab: in.cointab.app
+  static UpiApp cointab = UpiApp._fromEnum(_ValidUpiApps.cointab);
 
   /// BHIM CORP UPI(Corporation Bank): com.lcode.corpupi
   static UpiApp corpUpi = UpiApp._fromEnum(_ValidUpiApps.corpUpi);
@@ -117,8 +102,32 @@ class UpiApp {
   /// BHIM CSB-UPI(CSB Bank Ltd): com.lcode.csbupi
   static UpiApp csbUpi = UpiApp._fromEnum(_ValidUpiApps.csbUpi);
 
+  ///BHIM CUB UPI(CITY UNION BANK LTD): com.cub.wallet.gui
+  static UpiApp cubUpi = UpiApp._fromEnum(_ValidUpiApps.cubUpi);
+
   /// BHIM DCB Bank UPI(DCB Bank): com.olive.dcb.upi
   static UpiApp dcbUpi = UpiApp._fromEnum(_ValidUpiApps.dcbUpi);
+
+  ///digibank(DBS Bank India): com.dbs.in.digitalbank
+  static UpiApp digibank = UpiApp._fromEnum(_ValidUpiApps.digibank);
+
+  /// BHIM Equitas UPI(Equitas Small Finance Bank Ltd): com.equitasbank.upi
+  static UpiApp equitasUpi = UpiApp._fromEnum(_ValidUpiApps.equitasUpi);
+
+  /// Fino BPay(Fino Payments Bank): com.finopaytech.bpayfino
+  static UpiApp finoBPay = UpiApp._fromEnum(_ValidUpiApps.finoBPay);
+
+  /// Freecharge: com.freecharge.android
+  static UpiApp freecharge = UpiApp._fromEnum(_ValidUpiApps.freecharge);
+
+  /// Google Pay(GoogleLLC): com.google.android.apps.nbu.paisa.user
+  static UpiApp googlePay = UpiApp._fromEnum(_ValidUpiApps.googlePay);
+
+  /// HSBC Simply Pay(HSBC India): com.mgs.hsbcupi
+  static UpiApp hsbcSimplyPay = UpiApp._fromEnum(_ValidUpiApps.hsbcSimplyPay);
+
+  /// iMobile(ICICI Bank Ltd.): com.csam.icici.bank.imobile
+  static UpiApp iMobileICICI = UpiApp._fromEnum(_ValidUpiApps.iMobileICICI);
 
   /// BHIM IndianBank UPI(Indian Bank): com.infrasofttech.indianbankupi
   static UpiApp indianBankUpi = UpiApp._fromEnum(_ValidUpiApps.indianBankUpi);
@@ -132,17 +141,47 @@ class UpiApp {
   /// BHIM KBL UPI(KARNATAKA BANK): com.lcode.smartz
   static UpiApp kblUpi = UpiApp._fromEnum(_ValidUpiApps.kblUpi);
 
+  /// KhaaliJeb: com.khaalijeb.inkdrops
+  static UpiApp khaaliJeb = UpiApp._fromEnum(_ValidUpiApps.khaaliJeb);
+
+  /// Kotak - 811 & Mobile Banking(Kotak Mahindra Bank Ltd): com.msf.kbank.mobile
+  static UpiApp kotak = UpiApp._fromEnum(_ValidUpiApps.kotak);
+
   /// BHIM KVB Upay(The Karur Vysya Bank Ltd.): com.mycompany.kvb
   static UpiApp kvbUpay = UpiApp._fromEnum(_ValidUpiApps.kvbUpay);
 
   /// BHIM LVB UPAAY(LAKSHMI VILAS BANK): com.lvbank.upaay
   static UpiApp lvbUpaay = UpiApp._fromEnum(_ValidUpiApps.lvbUpaay);
 
+  /// BHIM Maha UPI(Bank of Maharashtra): com.infrasofttech.mahaupi
+  static UpiApp mahaUpi = UpiApp._fromEnum(_ValidUpiApps.mahaUpi);
+
+  /// Mi Pay(Non Xiaomi devices): com.mipay.in.wallet (From Play Store)
+  static UpiApp miPayGlobal = UpiApp._fromEnum(_ValidUpiApps.miPayGlobal);
+
+  /// Mi Pay(Only Xiaomi devices): com.mipay.wallet.in (From Get Apps)
+  static UpiApp miPayXiaomi = UpiApp._fromEnum(_ValidUpiApps.miPayXiaomi);
+
+  /// Mobikwik: com.mobikwik_new
+  static UpiApp mobikwik = UpiApp._fromEnum(_ValidUpiApps.mobikwik);
+
   /// BHIM Oriental Pay(Oriental Bank of Commerce): com.mgs.obcbank
   static UpiApp orientalPay = UpiApp._fromEnum(_ValidUpiApps.orientalPay);
 
+  /// Paytm(Paytm-One97 Communications Ltd.): net.one97.paytm
+  static UpiApp paytm = UpiApp._fromEnum(_ValidUpiApps.paytm);
+
   ///BHIM PayWiz(IDBI BANK): com.idbibank.paywiz
   static UpiApp paywiz = UpiApp._fromEnum(_ValidUpiApps.paywiz);
+
+  ///PayZapp(HDFC Bank Ltd.): com.enstage.wibmo.hdfc
+  static UpiApp payZapp = UpiApp._fromEnum(_ValidUpiApps.payZapp);
+
+  /// PhonePe: com.phonepe.app
+  static UpiApp phonePe = UpiApp._fromEnum(_ValidUpiApps.phonePe);
+
+  ///BHIM PNB(PNB): com.fss.pnbpsp
+  static UpiApp pnb = UpiApp._fromEnum(_ValidUpiApps.pnb);
 
   /// BHIM PSB(PUNJAB & SIND BANK): com.mobileware.upipsb
   static UpiApp psb = UpiApp._fromEnum(_ValidUpiApps.psb);
@@ -150,40 +189,33 @@ class UpiApp {
   /// BHIM RBL Pay(RBL Bank Ltd.): com.rblbank.upi
   static UpiApp rblPay = UpiApp._fromEnum(_ValidUpiApps.rblPay);
 
+  /// realme PaySa(M-Kash India Financial Solutions Private Limited): com.realmepay.payments
+  static UpiApp realmePaySa = UpiApp._fromEnum(_ValidUpiApps.realmePaySa);
+
+  /// BHIM SBI Pay(State Bank of India): com.sbi.upi
+  static UpiApp sbiPay = UpiApp._fromEnum(_ValidUpiApps.sbiPay);
+
   /// BHIM SyndUPI(Syndicate Bank): com.fisglobal.syndicateupi.app
   static UpiApp syndUpi = UpiApp._fromEnum(_ValidUpiApps.syndUpi);
 
+  /// Truecaller(True Software Scandinavia AB): com.truecaller
+  static UpiApp trueCallerUPI = UpiApp._fromEnum(_ValidUpiApps.trueCallerUpi);
+
   /// BHIM UCO UPI(UCO BANK): com.lcode.ucoupi
   static UpiApp ucoUpi = UpiApp._fromEnum(_ValidUpiApps.ucoUpi);
+
+  /// UltraCash: com.ultracash.payment.customer
+  static UpiApp ultraCash = UpiApp._fromEnum(_ValidUpiApps.ultraCash);
+
+  ///BHIM United UPI Pay(United Bank of India): com.fss.unbipsp
+  static UpiApp unitedUpiPay = UpiApp._fromEnum(_ValidUpiApps.unitedUpiPay);
 
   /// BHIM VIJAYA UPI App(Vijaya Bank): com.fss.vijayapsp
   static UpiApp vijayaUpi = UpiApp._fromEnum(_ValidUpiApps.vijayaUpi);
 
   /// BHIM YES PAY(Yes Bank Limited): com.YesBank
   static UpiApp yesPay = UpiApp._fromEnum(_ValidUpiApps.yesPay);
-
-  /// Fino BPay(Fino Payments Bank): com.finopaytech.bpayfino
-  static UpiApp finoBPay = UpiApp._fromEnum(_ValidUpiApps.finoBPay);
-
-  /// CANDI-Mobile Banking App!(CANARA BANK): com.canarabank.mobility
-  static UpiApp candi = UpiApp._fromEnum(_ValidUpiApps.candi);
-
-  /// Cointab: in.cointab.app
-  static UpiApp cointab = UpiApp._fromEnum(_ValidUpiApps.cointab);
-
-  /// HSBC Simply Pay(HSBC India): com.mgs.hsbcupi
-  static UpiApp hsbcSimplyPay = UpiApp._fromEnum(_ValidUpiApps.hsbcSimplyPay);
-
-  /// KhaaliJeb: com.khaalijeb.inkdrops
-  static UpiApp khaaliJeb = UpiApp._fromEnum(_ValidUpiApps.khaaliJeb);
-
-  /// BHIM Maha UPI(Bank of Maharashtra): com.infrasofttech.mahaupi
-  static UpiApp mahaUpi = UpiApp._fromEnum(_ValidUpiApps.mahaUpi);
-
-  /// UltraCash: com.ultracash.payment.customer
-  static UpiApp ultraCash = UpiApp._fromEnum(_ValidUpiApps.ultraCash);
-
-  // End of pre-defined Apps
+  // ---------------------------End of pre-defined Apps---------------------------------
 
   /// app is the package name of the app. Pass this in [app] argument of [startTransaction]
   String packageName;
@@ -215,6 +247,22 @@ class UpiApp {
   
   String _getName(_ValidUpiApps app){
     switch(app){
+      case _ValidUpiApps.unitedUpiPay:
+        return "United UPI Pay";
+      case _ValidUpiApps.pnb:
+        return "PNB UPI";
+      case _ValidUpiApps.kotak:
+        return "Kotak UPI";
+      case _ValidUpiApps.digibank:
+        return "Digibank UPI";
+      case _ValidUpiApps.cubUpi:
+        return "CUB UPI";
+      case _ValidUpiApps.realmePaySa:
+        return "Realme PaySa";
+      case _ValidUpiApps.payZapp:
+        return "PayZapp";
+      case _ValidUpiApps.equitasUpi:
+        return "Equitas UPI";
       case _ValidUpiApps.googlePay:
         return "Google Pay";
       case _ValidUpiApps.phonePe:
@@ -309,6 +357,22 @@ class UpiApp {
 
   String _getPackageName(_ValidUpiApps app) {
     switch (app) {
+      case _ValidUpiApps.unitedUpiPay:
+        return "com.fss.unbipsp";
+      case _ValidUpiApps.pnb:
+        return "com.fss.pnbpsp";
+      case _ValidUpiApps.kotak:
+        return "com.msf.kbank.mobile";
+      case _ValidUpiApps.digibank:
+        return "com.dbs.in.digitalbank";
+      case _ValidUpiApps.cubUpi:
+        return "com.cub.wallet.gui";
+      case _ValidUpiApps.realmePaySa:
+        return "com.realmepay.payments";
+      case _ValidUpiApps.payZapp:
+        return "com.enstage.wibmo.hdfc";
+      case _ValidUpiApps.equitasUpi:
+        return "com.equitasbank.upi";
       case _ValidUpiApps.googlePay:
         return "com.google.android.apps.nbu.paisa.user";
       case _ValidUpiApps.phonePe:

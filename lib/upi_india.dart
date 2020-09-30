@@ -4,56 +4,76 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_india/upi_app.dart';
+import 'package:upi_india/upi_exception.dart';
 import 'package:upi_india/upi_response.dart';
 
 export 'package:upi_india/upi_app.dart';
 export 'package:upi_india/upi_response.dart';
+export 'package:upi_india/upi_exception.dart';
 
-List<String> _validApps = [
-  UpiApp.airtelThanksUpi.packageName, //Sends back empty transaction data
+List<String> _verifiedApps = [
   UpiApp.allBank.packageName,
   UpiApp.amazonPay.packageName,
-//  UpiApp.auPay.packageName,
   UpiApp.axisPay.packageName,
-//  UpiApp.bandhanUpi.packageName,
   UpiApp.barodaPay.packageName,
   UpiApp.bhim.packageName,
-//  UpiApp.boiUpi.packageName,
-//  UpiApp.candi.packageName,
   UpiApp.centUpi.packageName,
   UpiApp.cointab.packageName,
   UpiApp.corpUpi.packageName,
-//  UpiApp.csbUpi.packageName,
   UpiApp.dcbUpi.packageName,
   UpiApp.finoBPay.packageName,
   UpiApp.freecharge.packageName,
   UpiApp.googlePay.packageName,
-//  UpiApp.hsbcSimplyPay.packageName,
   UpiApp.iMobileICICI.packageName,
-//  UpiApp.indianBankUpi.packageName,
   UpiApp.indusPay.packageName,
-//  UpiApp.jetPay.packageName,
-//  UpiApp.kblUpi.packageName,
   UpiApp.khaaliJeb.packageName,
-//  UpiApp.kvbUpay.packageName,
-//  UpiApp.lvbUpaay.packageName,
   UpiApp.mahaUpi.packageName,
-  UpiApp.miPayGlobal.packageName, // Null transaction Id
-  UpiApp.miPayXiaomi.packageName, // Null transaction Id
   UpiApp.mobikwik.packageName,
   UpiApp.orientalPay.packageName,
   UpiApp.paytm.packageName,
   UpiApp.paywiz.packageName,
   UpiApp.phonePe.packageName,
   UpiApp.psb.packageName,
-//  UpiApp.rblPay.packageName,
   UpiApp.sbiPay.packageName,
-//  UpiApp.syndUpi.packageName,
-  UpiApp.trueCallerUPI.packageName, // Repetitive mobile verification SMS failures
-//  UpiApp.ucoUpi.packageName,
-//  UpiApp.ultraCash.packageName,
-//  UpiApp.vijayaUpi.packageName,
   UpiApp.yesPay.packageName,
+];
+
+List<String> _appsReturningNoTxnId = [
+  UpiApp.miPayGlobal.packageName,
+  UpiApp.miPayXiaomi.packageName,
+  UpiApp.hsbcSimplyPay.packageName,
+];
+
+List<String> _nonVerifiedApps = [
+  UpiApp.trueCallerUPI.packageName, // Reetesh: Repetitive mobile verification SMS failures
+  UpiApp.boiUpi.packageName, // Reetesh: Mobile number verification failed
+  UpiApp.csbUpi.packageName, // Reetesh: Hangs on opening screen
+  UpiApp.cubUpi.packageName,
+  UpiApp.digibank.packageName,
+  UpiApp.equitasUpi.packageName, // Reetesh: Mobile number verification failed
+  UpiApp.kotak.packageName,
+  UpiApp.payZapp.packageName, // Reetesh: Mobile number verification failed
+  UpiApp.pnb.packageName,
+  UpiApp.rblPay.packageName, // Reetesh: Keeps looping in login screen
+  UpiApp.realmePaySa.packageName, // Reetesh: Mobile number verification failed
+  UpiApp.unitedUpiPay.packageName,
+  UpiApp.vijayaUpi.packageName, // Reetesh: Could never complete SMS Verification
+];
+
+List<String> _invalidApps = [
+  UpiApp.airtelThanksUpi.packageName, // Azhar, Reetesh: Never returns back after payment
+  UpiApp.auPay.packageName, // Reetesh: Returns null parameters in response after payment
+  UpiApp.bandhanUpi.packageName, // Reetesh: Something went wrong
+  UpiApp.candi.packageName, // Reetesh: Keeps saying transaction failed
+  UpiApp.indianBankUpi.packageName, // Reetesh: Unstable behaviour
+  UpiApp.jetPay.packageName,
+  // Reetesh: Intent invocation gets a java.lang.SecurityException: Permission Denial
+  UpiApp.kblUpi.packageName, // Reetesh: Mandatory values are missing
+  UpiApp.kvbUpay.packageName, // Reetesh: Does not auto fill input data
+  UpiApp.lvbUpaay.packageName, // Reetesh: Does not return back after payment with response
+  UpiApp.syndUpi.packageName, // Reetesh: Functional errors while trying to complete payment
+  UpiApp.ucoUpi.packageName, // Reetesh: Mandatory values are missing
+  UpiApp.ultraCash.packageName, // Reetesh: Transaction cancelled always
 ];
 
 // This is the main class.
@@ -65,11 +85,41 @@ class UpiIndia {
   }
 
   /// This method will return the [List] of all apps in users device which can handle UPI Intents as [UpiIndiaApp]
-  Future<List<UpiApp>> getAllUpiApps() async {
-    final List<Map> apps = await _channel.invokeListMethod<Map>('getAllUpiApps');
+  Future<List<UpiApp>> getAllUpiApps({
+    /// Is it necessary for the requested app to return Transaction ID on completion of transaction.
+    /// Defaults to true
+    ///
+    /// Some UPI apps like MiPay does not return Transaction ID on completion
+    /// If you set this to false, those app will be shown in the list otherwise not.
+    bool mandatoryTransactionId = true,
+
+    /// Set this to true if you want to include the non-verified apps in the list too.
+    /// It is recommended to set this to false for production.
+    bool allowNonVerifiedApps = false,
+  }) async {
+    List<Map> apps;
+    try{
+      apps = await _channel.invokeListMethod<Map>('getAllUpiApps');
+    }on PlatformException catch(e){
+      switch(e.code){
+        case "activity_missing":
+          return Future.error(UpiIndiaActivityMissingException());
+        case "package_get_failed":
+          return Future.error(UpiIndiaAppsGetException());
+      }
+    }
     List<UpiApp> upiIndiaApps = [];
+    List<String> _validApps = _verifiedApps;
+    if (allowNonVerifiedApps) {
+      _validApps.addAll(_nonVerifiedApps);
+    }
+    if (!mandatoryTransactionId) {
+      _validApps.addAll(_appsReturningNoTxnId);
+    }
     apps.forEach((app) {
-      upiIndiaApps.add(UpiApp.fromMap(Map<String, dynamic>.from(app)));
+      if (_validApps.contains(app['packageName'])) {
+        upiIndiaApps.add(UpiApp.fromMap(Map<String, dynamic>.from(app)));
+      }
     });
     return upiIndiaApps;
   }
@@ -77,7 +127,7 @@ class UpiIndia {
   /// This method is used to initiate a transaction with given parameters.
   Future<UpiResponse> startTransaction({
     /// app refers to app name provided using [UpiApp] class.
-    @required String app,
+    @required UpiApp app,
 
     /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
     /// Double check this value or you may end up paying the wrong person.
@@ -91,9 +141,12 @@ class UpiIndia {
 
     /// amount is the actual amount in decimal format (in INR by default) that should be paid.
     /// amount = 0 if you want user to enter the amount.
-    @required double amount,
+    double amount = 1,
 
-    // transactionRefId is a unique literal which you can use to find the transaction later easily.
+    /// If true allows user to enter the amount
+    bool flexibleAmount = false,
+
+    /// transactionRefId is a unique literal which you can use to find the transaction later easily.
     /// It is mandatory for Merchant transactions and dynamic URL generation.
     /// In response the "txnRef" that you will receive must match this value.
     String transactionRefId,
@@ -108,29 +161,61 @@ class UpiIndia {
     /// Payee merchant code. If present then needs to be passed as it is.
     String merchantId,
   }) {
-    // Assertions start
-    assert(receiverUpiId.contains(RegExp(r'\w+@\w+')));
-    assert(amount >= 0 && amount.isFinite);
-    assert(currency == "INR");
-    assert(
-        (merchantId != null && transactionRefId != null) || merchantId == null);
-    // Assertions stop
+//    assert((merchantId != null && transactionRefId != null) || merchantId == null);
 
+    if (!RegExp(r'^\w{2,}@\w{2,}$').hasMatch(receiverUpiId)) {
+      return Future.error(UpiIndiaInvalidParametersException("Incorrect UPI ID provided"));
+    }
+
+    if (amount < 1 || amount.isInfinite) {
+      return Future.error(
+        UpiIndiaInvalidParametersException(
+          "Incorrect amount provided. Range is between [1, Infinity)",
+        ),
+      );
+    }
+
+    if (!RegExp(r'^\d{1,}(\.\d{0,2})?$').hasMatch(amount.toString())) {
+      return Future.error(UpiIndiaInvalidParametersException(
+        "Incorrect amount format. Make sure to use only two digits after decimal",
+      ));
+    }
+
+    if (currency != "INR") {
+      return Future.error(UpiIndiaInvalidParametersException("Only INR is currently supported"));
+    }
+
+    print("further processing");
     return _channel.invokeMethod('startTransaction', {
-      "app": app,
+      "app": app.packageName,
       'receiverUpiId': receiverUpiId,
       'receiverName': receiverName,
       'transactionRefId': transactionRefId,
       'transactionNote': transactionNote,
-      'amount': amount.toString(),
+      'amount': flexibleAmount?'':amount.toString(),
       'currency': currency,
       'merchantId': merchantId,
     }).then((response) {
       print("UPI_INDIA_FINAL_RESPONSE: $response");
       return UpiResponse(response);
     }).catchError((e) {
-      print("UPI_INDIA_FINAL_RESPONSE: invalid_parameters");
-      return UpiResponse('invalid_parameters');
-    });
+      print("UPI_INDIA_FINAL_RESPONSE: ${e.message}");
+      switch (e.code) {
+        case "app_not_installed":
+          throw UpiIndiaAppNotInstalledException();
+          break;
+        case "null_response":
+          throw UpiIndiaNullResponseException();
+          break;
+        case "user_canceled":
+          throw UpiIndiaUserCancelledException();
+          break;
+        case "invalid_parameters":
+          throw UpiIndiaInvalidParametersException();
+          break;
+        default:
+          throw e;
+      }
+    }, test: (e) => e is PlatformException);
   }
 }

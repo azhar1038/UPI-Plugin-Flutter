@@ -2,10 +2,13 @@
 
 This plugin is used to integrate **UPI** Options in your **Android** app.
 
-If you can help me to extend this for ios too, feel free to do a Pull Request.
-Thanks in advance!
-
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
+
+## Help required
+If you can help to extend this for iOS, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/20).
+If you can help to verify the compatibility of different UPI apps, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/23).
+
+Thanks in advance :)
 
 ***
 <img src="https://user-images.githubusercontent.com/42082172/82893565-d3643480-9f6e-11ea-96a7-493181df6214.gif" alt="How example looks" width="300" height="540">
@@ -21,9 +24,20 @@ getAllUpiApps(),  startTransaction()
 3. **UpiResponse** - You will use this to get response from the requested app.
 
 4. **UpiPaymentStatus** - Use this to see if transaction was a success or not.
-
-5. **UpiError** - This class contains some common errors which you may encounter.
 ***
+
+## Custom Exception thrown by this Plugin (with self explanatory names)
+1. **UpiIndiaAppNotInstalledException**
+
+2. **UpiIndiaUserCancelledException**
+
+3. **UpiIndiaNullResponseException**
+
+4. **UpiIndiaInvalidParametersException**
+
+5. **UpiIndiaActivityMissingException**
+
+6. **UpiIndiaAppsGetException**
 
 ## How to start transaction?
 
@@ -60,10 +74,10 @@ void initState() {
 
 **OR**
 
-You can use some of the predefined apps directly, like:
+You can directly use the predefined apps, like:
 
 ```dart
-String app = UpiApp.GooglePay;
+UpiApp app = UpiApp.googlePay;
 ```
 
 and assign it to the app parameter in **Step 4**
@@ -74,7 +88,7 @@ Create a method which will start the transaction on being called, as shown.
 ```dart
 Future<UpiResponse> initiateTransaction(String app) async {
   return _upiIndia.startTransaction(
-    app: apps[0].app, //  I took only the first app from List<UpiIndiaApp> app.
+    app: apps[0], //  I took only the first app from List<UpiIndiaApp> app.
     receiverUpiId: 'tester@test', // Make Sure to change this UPI Id
     receiverName: 'Tester',
     transactionRefId: 'TestingId',
@@ -91,29 +105,34 @@ Call this method on any button click or through FutureBuilder and then you will 
 ## How to handle Response?
 
 ### Step 1:
-After getting **UpiResponse**, check if its error property is **null** or not. If it is **not null**, handle it as shown:
+After getting the snapshot from the Future, check if there is any error or not:
 
 ```dart
-if (_upiResponse.error != null) {
-switch (_upiResponse.error) {
-  case UpiError.APP_NOT_INSTALLED:
-    print("Requested app not installed on device");
-    break;
-  case UpiError.INVALID_PARAMETERS:
-    print("Requested app cannot handle the transaction");
-    break;
-  case UpiError.NULL_RESPONSE:
-    print("requested app didn't returned any response");
-    break;
-  case UpiError.USER_CANCELLED:
-    print("You cancelled the transaction");
-    break;
+if (snapshot.hasError) {
+  print(snapshot.error.toString());
+  String errorText = "";
+  switch (snapshot.error.runtimeType) {
+    case UpiIndiaAppNotInstalledException:
+      print("Requested app not installed on device");
+      break;
+    case UpiIndiaUserCancelledException:
+      print("You cancelled the transaction");
+      break;
+    case UpiIndiaNullResponseException:
+      print("Requested app didn't return any response");
+      break;
+    case UpiIndiaInvalidParametersException:
+      print("Requested app cannot handle the transaction");
+      break;
+    default:
+      print("An Unknown error has occurred");
+      break;
   }
 }
 ```
 
 ### Step 2:
-If **_upiResponse.error** is null, you can then get these parameters from it:
+If **snapshot.hasError** is false, you can then get the response **UpiResponse** from **snapshot.data** and extract these parameters:
 * Transaction ID
 * Response Code
 * Approval Reference Number
@@ -128,20 +147,66 @@ Check the Status property. It has following values:
 
 If Status is SUCCESS, Congratulations! You have successfully used this plugin.
 ***
-
-Predefined apps in this plugin are:
-* PayTM
-* Google Pay
-* BHIM
-* PhonePe
-* Amazon Pay
-* Truecaller
-* My Airtel
-* Mobikwik
-* FreeCharge
-* SBIPay
-* IMobileICICI
-
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
+
+## Supported Apps
+### Verified Apps - These Apps have been tested to work fine with these plugins (included by default):
+* All Bank 
+* Amazon Pay 
+* Axis Pay 
+* Baroda Pay 
+* BHIM 
+* Cent UPI 
+* Cointab 
+* Corp UPI 
+* DCB UPI 
+* Fino BPay 
+* Freecharge 
+* Google Pay 
+* iMobile ICICI 
+* Indus Pay 
+* Khaali Jeb 
+* Maha UPI 
+* Mobikwik 
+* Oriental Pay 
+* Paytm 
+* Paywiz 
+* PhonePe 
+* PSB 
+* SBI Pay 
+* Yes Pay 
+
+### Apps that don't return Transaction ID in response (pass ```mandatoryTransactionId: false``` to ```getAllUpiApps``` to use them):
+* MiPay (Both Play Store and GetApps version)
+* HSBC Simply Pay
+
+### Non-Verified Apps - These apps haven't been tested yet (pass ```allowNonVerifiedApps: true``` to ```getAllUpiApps``` to use them):
+* True Caller
+* BOI UPI
+* CSB UPI
+* CUB UPI
+* digibank
+* Equitas UPI
+* Kotak
+* PayZapp
+* PNB
+* RBL Pay
+* realme PaySa
+* United UPI Pay
+* Vijaya UPI
+
+### Apps that have been marked currently as NOT WORKING and should not be included for now.
+* Airtel Thanks
+* AUPay
+* Bandhan Bank UPI
+* CANDI
+* Indian Bank UPI
+* Jet Pay
+* KBL UPI
+* KVB UPI
+* LVB UPAAY
+* Synd UPI
+* UCO UPI
+* Ultra Cash
 
 Don't forget to give Like and Stars!

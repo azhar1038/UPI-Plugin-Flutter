@@ -87,7 +87,7 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
         Uri uri = Uri.parse(uriString);
         intent.setData(uri);
         if (activity == null) {
-            finalResult.error("ACTIVITY_MISSING", "No attached activity found!", null);
+            finalResult.error("activity_missing", "No attached activity found!", null);
             return;
         }
         PackageManager pm = activity.getPackageManager();
@@ -121,7 +121,7 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
                 packages.add(m);
             } catch (Exception e) {
                 e.printStackTrace();
-                finalResult.error("PACKAGE_GET_FAILED", "Failed to get list of installed UPI apps", null);
+                finalResult.error("package_get_failed", "Failed to get list of installed UPI apps", null);
                 return;
             }
         }
@@ -181,12 +181,12 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
             } else {
                 Log.d(TAG, app + " not installed on the device.");
                 resultReturned = true;
-                finalResult.success("app_not_installed");
+                finalResult.error("app_not_installed", "Requested app not installed", null);
             }
         } catch (Exception ex) {
             resultReturned = true;
             Log.d(TAG, "" + ex);
-            finalResult.error("FAILED", "invalid_parameters", null);
+            finalResult.error("invalid_parameters", "Transaction parameters are invalid", null);
         }
     }
 
@@ -243,11 +243,11 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
                     Log.d(TAG, "RAW RESPONSE FROM REQUESTED APP: "+response);
                     if (!resultReturned) finalResult.success(response);
                 } catch (Exception ex) {
-                    if (!resultReturned) finalResult.success("null_response");
+                    if (!resultReturned) finalResult.error("null_response", "No response received from app", null);
                 }
             } else {
                 Log.d(TAG, "Received NULL, User cancelled the transaction.");
-                if (!resultReturned) finalResult.success("user_canceled");
+                if (!resultReturned) finalResult.error("user_canceled", "User canceled the transaction", null);
             }
         }
         return true;

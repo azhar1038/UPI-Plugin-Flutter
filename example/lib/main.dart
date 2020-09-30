@@ -23,17 +23,29 @@ class _HomePageState extends State<HomePage> {
   UpiIndia _upiIndia = UpiIndia();
   List<UpiApp> apps;
 
+  TextStyle header = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
+
+  TextStyle value = TextStyle(
+    fontWeight: FontWeight.w400,
+    fontSize: 14,
+  );
+
   @override
   void initState() {
-    _upiIndia.getAllUpiApps().then((value) {
+    _upiIndia.getAllUpiApps(mandatoryTransactionId: false).then((value) {
       setState(() {
         apps = value;
       });
+    }).catchError((e){
+      apps = [];
     });
     super.initState();
   }
 
-  Future<UpiResponse> initiateTransaction(String app) async {
+  Future<UpiResponse> initiateTransaction(UpiApp app) async {
     return _upiIndia.startTransaction(
       app: app,
       receiverUpiId: '9078600498@ybl',
@@ -48,36 +60,62 @@ class _HomePageState extends State<HomePage> {
     if (apps == null)
       return Center(child: CircularProgressIndicator());
     else if (apps.length == 0)
-      return Center(child: Text("No apps found to handle transaction."));
-    else
       return Center(
-        child: Wrap(
-          children: apps.map<Widget>((UpiApp app) {
-            return GestureDetector(
-              onTap: () {
-                _transaction = initiateTransaction(app.app);
-                setState(() {});
-              },
-              child: Container(
-                height: 100,
-                width: 100,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image.memory(
-                      app.icon,
-                      height: 60,
-                      width: 60,
-                    ),
-                    Text(app.name),
-                  ],
-                ),
-              ),
-            );
-          }).toList(),
+        child: Text(
+          "No apps found to handle transaction.",
+          style: header,
         ),
       );
+    else
+      return Align(
+        alignment: Alignment.topCenter,
+        child: SingleChildScrollView(
+          physics: BouncingScrollPhysics(),
+          child: Wrap(
+            children: apps.map<Widget>((UpiApp app) {
+              return GestureDetector(
+                onTap: () {
+                  _transaction = initiateTransaction(app);
+                  setState(() {});
+                },
+                child: Container(
+                  height: 100,
+                  width: 100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Image.memory(
+                        app.icon,
+                        height: 60,
+                        width: 60,
+                      ),
+                      Text(app.name),
+                    ],
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      );
+  }
+
+  Widget displayTransactionData(title, body) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text("$title: ", style: header),
+          Flexible(
+              child: Text(
+            body,
+            style: value,
+          )),
+        ],
+      ),
+    );
   }
 
   @override
@@ -88,44 +126,49 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: <Widget>[
-          displayUpiApps(),
           Expanded(
-            flex: 2,
+            child: displayUpiApps(),
+          ),
+          Expanded(
             child: FutureBuilder(
               future: _transaction,
-              builder: (BuildContext context,
-                  AsyncSnapshot<UpiResponse> snapshot) {
+              builder: (BuildContext context, AsyncSnapshot<UpiResponse> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasError) {
-                    return Center(child: Text('An Unknown error has occured'));
-                  }
-                  UpiResponse _upiResponse;
-                  _upiResponse = snapshot.data;
-                  if (_upiResponse.error != null) {
-                    String text = '';
-                    switch (snapshot.data.error) {
-                      case UpiError.APP_NOT_INSTALLED:
-                        text = "Requested app not installed on device";
+                    print(snapshot.error.toString());
+                    String errorText = "";
+                    switch (snapshot.error.runtimeType) {
+                      case UpiIndiaAppNotInstalledException:
+                        errorText = "Requested app not installed on device";
                         break;
-                      case UpiError.INVALID_PARAMETERS:
-                        text = "Requested app cannot handle the transaction";
+                      case UpiIndiaUserCancelledException:
+                        errorText = "You cancelled the transaction";
                         break;
-                      case UpiError.NULL_RESPONSE:
-                        text = "requested app didn't returned any response";
+                      case UpiIndiaNullResponseException:
+                        errorText = "Requested app didn't return any response";
                         break;
-                      case UpiError.USER_CANCELLED:
-                        text = "You cancelled the transaction";
+                      case UpiIndiaInvalidParametersException:
+                        errorText = "Requested app cannot handle the transaction";
+                        break;
+                      default:
+                        errorText = "An Unknown error has occurred";
                         break;
                     }
                     return Center(
-                      child: Text(text),
+                      child: Text(
+                        errorText,
+                        style: header,
+                      ),
                     );
                   }
-                  String txnId = _upiResponse.transactionId;
-                  String resCode = _upiResponse.responseCode;
-                  String txnRef = _upiResponse.transactionRefId;
-                  String status = _upiResponse.status;
-                  String approvalRef = _upiResponse.approvalRefNo;
+                  UpiResponse _upiResponse;
+                  _upiResponse = snapshot.data;
+                  String txnId = _upiResponse.transactionId ?? "N/A";
+                  if (txnId.isEmpty) txnId = "N/A";
+                  String resCode = _upiResponse.responseCode ?? "N/A";
+                  String txnRef = _upiResponse.transactionRefId ?? "N/A";
+                  String status = _upiResponse.status ?? "N/A";
+                  String approvalRef = _upiResponse.approvalRefNo ?? 'N/A';
                   switch (status) {
                     case UpiPaymentStatus.SUCCESS:
                       print('Transaction Successful');
@@ -137,20 +180,25 @@ class _HomePageState extends State<HomePage> {
                       print('Transaction Failed');
                       break;
                     default:
-                      print('Received an Unknown transaction status');
+                      print('Unknown Error occurred');
                   }
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Transaction Id: $txnId\n'),
-                      Text('Response Code: $resCode\n'),
-                      Text('Reference Id: $txnRef\n'),
-                      Text('Status: $status\n'),
-                      Text('Approval No: $approvalRef'),
-                    ],
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        displayTransactionData('Transaction Id', txnId),
+                        displayTransactionData('Response Code', resCode),
+                        displayTransactionData('Reference Id', txnRef),
+                        displayTransactionData('Status', status.toUpperCase()),
+                        displayTransactionData('Approval No', approvalRef),
+                      ],
+                    ),
                   );
                 } else
-                  return Text(' ');
+                  return Center(
+                    child: Text(''),
+                  );
               },
             ),
           )

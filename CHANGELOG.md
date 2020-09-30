@@ -1,3 +1,16 @@
+## 2.2.0
+**Breaking Change**
+* `startTransaction` now does not return **UpiResponse** on error, rather throws error.
+* Names of predefined apps now use camelCase as they are no longer constants.
+* `app` parameter of **UpiApp** has been renamed to `packageName` to avoid confusion.
+* `app` parameter passed in `startTransaction` now directly takes UpiApp instead of String.
+* New Custom error classes have been added.
+* `getAllUpiApps` now has two new parameters: `mandatoryTransactionId`, `allowNonVerifiedApps`
+* Airtel Thanks (My Airtel) has been moved to incompatible app group as it was not returning any response.
+* New UPI Apps included.
+* Now only the supported apps will be returned by `getAllUpiApps`.
+* Migrated to use Android plugin APIs Embedding v2.
+
 ## 2.1.2
 **Breaking Change** Names of classes have been changed to make them more concise.
 
