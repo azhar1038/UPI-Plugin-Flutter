@@ -1,6 +1,7 @@
 # UPI India (for Android only)
 
 This plugin is used to integrate **UPI** Options in your **Android** app.
+[Check the Supported apps here.](#supported-apps)
 
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
 
@@ -110,7 +111,6 @@ After getting the snapshot from the Future, check if there is any error or not:
 ```dart
 if (snapshot.hasError) {
   print(snapshot.error.toString());
-  String errorText = "";
   switch (snapshot.error.runtimeType) {
     case UpiIndiaAppNotInstalledException:
       print("Requested app not installed on device");
@@ -150,7 +150,7 @@ If Status is SUCCESS, Congratulations! You have successfully used this plugin.
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
 
 ## Supported Apps
-### Verified Apps - These Apps have been tested to work fine with these plugins (included by default):
+#### Verified Apps - These Apps have been tested to work fine with this plugin (included by default):
 * All Bank 
 * Amazon Pay 
 * Axis Pay 
@@ -176,11 +176,11 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 * SBI Pay 
 * Yes Pay 
 
-### Apps that don't return Transaction ID in response (pass ```mandatoryTransactionId: false``` to ```getAllUpiApps``` to use them):
+#### Apps that don't return Transaction ID in response (pass ```mandatoryTransactionId: false``` to ```getAllUpiApps``` to use them):
 * MiPay (Both Play Store and GetApps version)
 * HSBC Simply Pay
 
-### Non-Verified Apps - These apps haven't been tested yet (pass ```allowNonVerifiedApps: true``` to ```getAllUpiApps``` to use them):
+#### Non-Verified Apps - These apps haven't been tested yet (pass ```allowNonVerifiedApps: true``` to ```getAllUpiApps``` to use them):
 * True Caller
 * BOI UPI
 * CSB UPI
@@ -195,7 +195,8 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 * United UPI Pay
 * Vijaya UPI
 
-### Apps that have been marked currently as NOT WORKING and should not be included for now.
+## Unsupported Apps
+#### (These apps are not working as expected currently)
 * Airtel Thanks
 * AUPay
 * Bandhan Bank UPI
