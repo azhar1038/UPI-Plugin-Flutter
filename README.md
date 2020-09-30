@@ -1,12 +1,12 @@
 # UPI India (for Android only)
 
-This plugin is used to integrate **UPI** Options in your **Android** app.
+This plugin is used to integrate **UPI** Options in your **Android** app.  
 [Check the Supported apps here.](#supported-apps)
 
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
 
 ## Help required
-If you can help to extend this for iOS, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/20).
+If you can help to extend this for iOS, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/20).  
 If you can help to verify the compatibility of different UPI apps, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/23).
 
 Thanks in advance :)
@@ -152,52 +152,52 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 ## Supported Apps
 #### Verified Apps - These Apps have been tested to work fine with this plugin (included by default):
 * All Bank 
-* Amazon Pay 
+* **Amazon Pay** 
 * Axis Pay 
 * Baroda Pay 
-* BHIM 
+* **BHIM** 
 * Cent UPI 
 * Cointab 
 * Corp UPI 
 * DCB UPI 
 * Fino BPay 
 * Freecharge 
-* Google Pay 
+* **Google Pay** 
 * iMobile ICICI 
 * Indus Pay 
 * Khaali Jeb 
 * Maha UPI 
 * Mobikwik 
 * Oriental Pay 
-* Paytm 
+* **Paytm** 
 * Paywiz 
-* PhonePe 
+* **PhonePe** 
 * PSB 
 * SBI Pay 
 * Yes Pay 
 
-#### Apps that don't return Transaction ID in response (pass ```mandatoryTransactionId: false``` to ```getAllUpiApps``` to use them):
-* MiPay (Both Play Store and GetApps version)
+#### Apps that don't return Transaction ID in response (pass `mandatoryTransactionId: false` to `getAllUpiApps` to use them):
+* **MiPay** (Both Play Store and GetApps version)
 * HSBC Simply Pay
 
-#### Non-Verified Apps - These apps haven't been tested yet (pass ```allowNonVerifiedApps: true``` to ```getAllUpiApps``` to use them):
-* True Caller
+#### Non-Verified Apps - These apps haven't been tested yet (pass `allowNonVerifiedApps: true` to `getAllUpiApps` to use them):
+* **True Caller**
 * BOI UPI
 * CSB UPI
 * CUB UPI
 * digibank
 * Equitas UPI
 * Kotak
-* PayZapp
+* **PayZapp**
 * PNB
 * RBL Pay
-* realme PaySa
+* **realme PaySa**
 * United UPI Pay
 * Vijaya UPI
 
 ## Unsupported Apps
 #### (These apps are not working as expected currently)
-* Airtel Thanks
+* **Airtel Thanks**
 * AUPay
 * Bandhan Bank UPI
 * CANDI
