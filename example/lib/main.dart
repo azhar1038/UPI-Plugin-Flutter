@@ -79,7 +79,41 @@ class _HomePageState extends State<HomePage> {
         ),
       );
   }
+  
+  String _upiErrorHandler(error) {
+      switch (error) {
+          case UpiError.APP_NOT_INSTALLED:
+             text = "Requested app not installed on device";
+             break;
+          case UpiError.INVALID_PARAMETERS:
+              text = "Requested app cannot handle the transaction";
+              break;
+          case UpiError.NULL_RESPONSE:
+              text = "requested app didn't returned any response";
+              break;
+          case UpiError.USER_CANCELLED:
+               text = "You cancelled the transaction";
+               break;
+      }
 
+  }
+  
+  void _checkTxnStatus(UpiPaymentStatus status) {
+    switch (status) {
+      case UpiPaymentStatus.SUCCESS:
+        print('Transaction Successful');
+        break;
+      case UpiPaymentStatus.SUBMITTED:
+        print('Transaction Submitted');
+        break;
+      case UpiPaymentStatus.FAILURE:
+        print('Transaction Failed');
+        break;
+      default:
+        print('Received an Unknown transaction status');
+     }
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,21 +136,7 @@ class _HomePageState extends State<HomePage> {
                   UpiResponse _upiResponse;
                   _upiResponse = snapshot.data;
                   if (_upiResponse.error != null) {
-                    String text = '';
-                    switch (snapshot.data.error) {
-                      case UpiError.APP_NOT_INSTALLED:
-                        text = "Requested app not installed on device";
-                        break;
-                      case UpiError.INVALID_PARAMETERS:
-                        text = "Requested app cannot handle the transaction";
-                        break;
-                      case UpiError.NULL_RESPONSE:
-                        text = "requested app didn't returned any response";
-                        break;
-                      case UpiError.USER_CANCELLED:
-                        text = "You cancelled the transaction";
-                        break;
-                    }
+                    String text = _upiErrorHandler(_upiResponse.error);
                     return Center(
                       child: Text(text),
                     );
@@ -126,19 +146,8 @@ class _HomePageState extends State<HomePage> {
                   String txnRef = _upiResponse.transactionRefId;
                   String status = _upiResponse.status;
                   String approvalRef = _upiResponse.approvalRefNo;
-                  switch (status) {
-                    case UpiPaymentStatus.SUCCESS:
-                      print('Transaction Successful');
-                      break;
-                    case UpiPaymentStatus.SUBMITTED:
-                      print('Transaction Submitted');
-                      break;
-                    case UpiPaymentStatus.FAILURE:
-                      print('Transaction Failed');
-                      break;
-                    default:
-                      print('Received an Unknown transaction status');
-                  }
+                  _checkTxnStatus(status);
+                  
                   return Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
