@@ -18,14 +18,24 @@ Thanks in advance :)
 
 ## Classes to know
 1. **UpiIndia** - It is the main class containing two methods:
-* getAllUpiApps() - It takes: 
-  * `bool mandatoryTransactionId`: Should include those apps which doesn't return Transaction ID or not  
-  * `bool allowNonVerifiedApps`: Should include apps whose working has not been verified yet or not  
-  * `List[UpiApp] includeOnly`: List of UpiApps which should be shown and hide the others.
+  - getAllUpiApps() - It takes: 
+    * `bool allowNonVerifiedApps`: Should include apps whose working has not been verified yet or not  
+    * `List[UpiApp] includeOnly`: List of UpiApps which should be shown and hide the others.
+    * `bool mandatoryTransactionId`: Should include those apps which doesn't return Transaction ID or not  
 
-* startTransaction()
+  - startTransaction() - It takes:
+    * `double amount`: Amount to transfer (in ₹)
+    * `UpiApp app`: Which app to use to do the transaction
+    * `String currency`: Currently only supports INR
+    * `bool flexibleAmount`: Set `true` to allow user to fill the amount
+    * `String merchantId`: Merchant code if present
+    * `String receiverId`: ID of the receiver
+    * `String receiverName`: Name of receiver
+    * `String transactionNote`: A note about the transaction
+    * `String transactionRefId`: Reference Id of transaction
+    * `String url`: For some extra information
 
-2. **UpiApp** - It contains package name of some popular UPI apps. It is also the model class for the apps returned by getAllUpiApps() and now stores **app icons** too.
+2. **UpiApp** - It contains supported apps. It is also the model class for the apps returned by getAllUpiApps().
 
 3. **UpiResponse** - You will use this to get response from the requested app.
 
@@ -184,27 +194,27 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 * Yes Pay 
 
 #### Apps that don't return Transaction ID in response (pass `mandatoryTransactionId: false` to `getAllUpiApps` to use them):
-* **MiPay** (Both Play Store and GetApps version)
+* MiPay (Both Play Store and GetApps version)
 * HSBC Simply Pay
 
 #### Non-Verified Apps - These apps haven't been tested yet (pass `allowNonVerifiedApps: true` to `getAllUpiApps` to use them):
-* **True Caller**
+* True Caller
 * BOI UPI
 * CSB UPI
 * CUB UPI
 * digibank
 * Equitas UPI
 * Kotak
-* **PayZapp**
+* PayZapp
 * PNB
 * RBL Pay
-* **realme PaySa**
+* realme PaySa
 * United UPI Pay
 * Vijaya UPI
 
 ## Unsupported Apps
 #### (These apps are not working as expected currently)
-* **Airtel Thanks**
+* Airtel Thanks
 * AUPay
 * Bandhan Bank UPI
 * CANDI
