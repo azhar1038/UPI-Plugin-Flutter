@@ -60,21 +60,21 @@ List<String> _nonVerifiedApps = [
   UpiApp.vijayaUpi.packageName, // Reetesh: Could never complete SMS Verification
 ];
 
-List<String> _invalidApps = [
-  UpiApp.airtelThanksUpi.packageName, // Azhar, Reetesh: Never returns back after payment
-  UpiApp.auPay.packageName, // Reetesh: Returns null parameters in response after payment
-  UpiApp.bandhanUpi.packageName, // Reetesh: Something went wrong
-  UpiApp.candi.packageName, // Reetesh: Keeps saying transaction failed
-  UpiApp.indianBankUpi.packageName, // Reetesh: Unstable behaviour
-  UpiApp.jetPay.packageName,
+//List<String> _invalidApps = [
+//  UpiApp.airtelThanksUpi.packageName, // Azhar, Reetesh: Never returns back after payment
+//  UpiApp.auPay.packageName, // Reetesh: Returns null parameters in response after payment
+//  UpiApp.bandhanUpi.packageName, // Reetesh: Something went wrong
+//  UpiApp.candi.packageName, // Reetesh: Keeps saying transaction failed
+//  UpiApp.indianBankUpi.packageName, // Reetesh: Unstable behaviour
+//  UpiApp.jetPay.packageName,
   // Reetesh: Intent invocation gets a java.lang.SecurityException: Permission Denial
-  UpiApp.kblUpi.packageName, // Reetesh: Mandatory values are missing
-  UpiApp.kvbUpay.packageName, // Reetesh: Does not auto fill input data
-  UpiApp.lvbUpaay.packageName, // Reetesh: Does not return back after payment with response
-  UpiApp.syndUpi.packageName, // Reetesh: Functional errors while trying to complete payment
-  UpiApp.ucoUpi.packageName, // Reetesh: Mandatory values are missing
-  UpiApp.ultraCash.packageName, // Reetesh: Transaction cancelled always
-];
+//  UpiApp.kblUpi.packageName, // Reetesh: Mandatory values are missing
+//  UpiApp.kvbUpay.packageName, // Reetesh: Does not auto fill input data
+//  UpiApp.lvbUpaay.packageName, // Reetesh: Does not return back after payment with response
+//  UpiApp.syndUpi.packageName, // Reetesh: Functional errors while trying to complete payment
+//  UpiApp.ucoUpi.packageName, // Reetesh: Mandatory values are missing
+//  UpiApp.ultraCash.packageName, // Reetesh: Transaction cancelled always
+//];
 
 // This is the main class.
 class UpiIndia {
@@ -129,6 +129,10 @@ class UpiIndia {
     /// app refers to app name provided using [UpiApp] class.
     @required UpiApp app,
 
+    /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
+    /// Double check this value or you may end up paying the wrong person.
+    @required String receiverId,
+
     /// receiverName is the name of the Payee( who will receive the  money)
     @required String receiverName,
 
@@ -139,18 +143,6 @@ class UpiIndia {
 
     /// transactionNote provides short description of transaction.
     String transactionNote,
-
-    /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
-    /// Double check this value or you may end up paying the wrong person.
-    /// If both [receiverUpiId] and [receiverAccountNumber] are provided, UPI ID will be used.
-    String receiverUpiId,
-
-    /// Account Number of the receiver. For transferring to bank account number instead of UPI ID.
-    /// [receiverIfscCode] must be provided along with this.
-    String receiverAccountNumber,
-
-    /// IFSC Number of receiver. Must be provided with [receiverAccountNumber].
-    String receiverIfscCode,
 
     /// amount is the actual amount in decimal format (in INR by default) that should be paid.
     /// amount = 0 if you want user to enter the amount.
@@ -171,25 +163,25 @@ class UpiIndia {
   }) {
 //    assert((merchantId != null && transactionRefId != null) || merchantId == null);
     assert(app != null);
-    assert(receiverUpiId != null || (receiverAccountNumber != null && receiverIfscCode != null));
+    assert(receiverId != null);
     assert(receiverName != null);
     assert(transactionRefId != null);
 
-    if (receiverUpiId != null && !RegExp(r'^\w{2,}@\w{2,}$').hasMatch(receiverUpiId)) {
+    if (receiverId.split("@").length != 2) {
       return Future.error(UpiIndiaInvalidParametersException("Incorrect UPI ID provided"));
     }
 
-    if (receiverAccountNumber != null && !RegExp(r'^\d{9,18}$').hasMatch(receiverAccountNumber)) {
-      return Future.error(UpiIndiaInvalidParametersException(
-        "Invalid Account number provided! Indian Account number length varies between 9 to 18 only",
-      ));
-    }
-
-    if(receiverIfscCode != null && !RegExp(r'^[A-Za-z]{4}[a-zA-Z0-9]{7}$').hasMatch(receiverIfscCode)){
-      return Future.error(UpiIndiaInvalidParametersException(
-        "Invalid IFSC code provided!",
-      ));
-    }
+//    if (receiverAccountNumber != null && !RegExp(r'^\d{9,18}$').hasMatch(receiverAccountNumber)) {
+//      return Future.error(UpiIndiaInvalidParametersException(
+//        "Invalid Account number provided! Indian Account number length varies between 9 to 18 only",
+//      ));
+//    }
+//
+//    if(receiverIfscCode != null && !RegExp(r'^[A-Za-z]{4}[a-zA-Z0-9]{7}$').hasMatch(receiverIfscCode)){
+//      return Future.error(UpiIndiaInvalidParametersException(
+//        "Invalid IFSC code provided!",
+//      ));
+//    }
 
     if (amount < 1 || amount > 100000) {
       return Future.error(
@@ -209,17 +201,9 @@ class UpiIndia {
       return Future.error(UpiIndiaInvalidParametersException("Only INR is currently supported"));
     }
 
-    String receiver;
-
-    if(receiverUpiId != null){
-      receiver = receiverUpiId;
-    }else{
-      receiver = "$receiverAccountNumber@$receiverIfscCode.ifsc.npci";
-    }
-    print(receiver);
     return _channel.invokeMethod('startTransaction', {
       "app": app.packageName,
-      'receiverUpiId': receiver,
+      'receiverUpiId': receiverId,
       'receiverName': receiverName,
       'transactionRefId': transactionRefId,
       'transactionNote': transactionNote,
@@ -248,5 +232,27 @@ class UpiIndia {
           throw e;
       }
     }, test: (e) => e is PlatformException);
+  }
+
+  /// To generate normalized and fully qualified payment address using Account number and IFSC code.
+  String getIdFromAccount(String accountNumber, String ifscCode){
+    return "$accountNumber@$ifscCode.ifsc.npci";
+  }
+
+  /// To generate normalized and fully qualified payment address using Aadhaar number.
+  /// Aadhar number should be linked to account otherwise transaction will fail.
+  String getIdFromAadhaar(String aadhaarNumber){
+    return "$aadhaarNumber@aadhar.npci";
+  }
+
+  /// To generate normalized and fully qualified payment address using Mobile number.
+  /// Mobile number should be registered otherwise transaction will fail
+  String getIdFromMobile(String mobileNumber){
+    return "$mobileNumber@mobile.npci";
+  }
+
+  /// To generate normalized and fully qualified payment address using RuPay card number.
+  String getIdFromRuPay(String ruPayNumber){
+    return "$ruPayNumber@rupay.npci";
   }
 }
