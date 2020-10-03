@@ -98,10 +98,10 @@ class UpiIndia {
     bool allowNonVerifiedApps = false,
   }) async {
     List<Map> apps;
-    try{
+    try {
       apps = await _channel.invokeListMethod<Map>('getAllUpiApps');
-    }on PlatformException catch(e){
-      switch(e.code){
+    } on PlatformException catch (e) {
+      switch (e.code) {
         case "activity_missing":
           return Future.error(UpiIndiaActivityMissingException());
         case "package_get_failed":
@@ -129,15 +129,28 @@ class UpiIndia {
     /// app refers to app name provided using [UpiApp] class.
     @required UpiApp app,
 
-    /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
-    /// Double check this value or you may end up paying the wrong person.
-    @required String receiverUpiId,
-
     /// receiverName is the name of the Payee( who will receive the  money)
     @required String receiverName,
 
+    /// transactionRefId is a unique literal which you can use to find the transaction later easily.
+    /// It is mandatory for Merchant transactions and dynamic URL generation.
+    /// In response the "txnRef" that you will receive must match this value.
+    @required String transactionRefId,
+
     /// transactionNote provides short description of transaction.
-    @required String transactionNote,
+    String transactionNote,
+
+    /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
+    /// Double check this value or you may end up paying the wrong person.
+    /// If both [receiverUpiId] and [receiverAccountNumber] are provided, UPI ID will be used.
+    String receiverUpiId,
+
+    /// Account Number of the receiver. For transferring to bank account number instead of UPI ID.
+    /// [receiverIfscCode] must be provided along with this.
+    String receiverAccountNumber,
+
+    /// IFSC Number of receiver. Must be provided with [receiverAccountNumber].
+    String receiverIfscCode,
 
     /// amount is the actual amount in decimal format (in INR by default) that should be paid.
     /// amount = 0 if you want user to enter the amount.
@@ -145,11 +158,6 @@ class UpiIndia {
 
     /// If true allows user to enter the amount
     bool flexibleAmount = false,
-
-    /// transactionRefId is a unique literal which you can use to find the transaction later easily.
-    /// It is mandatory for Merchant transactions and dynamic URL generation.
-    /// In response the "txnRef" that you will receive must match this value.
-    String transactionRefId,
 
     /// currency refers to the currency code. Currently only "INR" is supported by UPI.
     String currency = "INR",
@@ -162,15 +170,31 @@ class UpiIndia {
     String merchantId,
   }) {
 //    assert((merchantId != null && transactionRefId != null) || merchantId == null);
+    assert(app != null);
+    assert(receiverUpiId != null || (receiverAccountNumber != null && receiverIfscCode != null));
+    assert(receiverName != null);
+    assert(transactionRefId != null);
 
-    if (!RegExp(r'^\w{2,}@\w{2,}$').hasMatch(receiverUpiId)) {
+    if (receiverUpiId != null && !RegExp(r'^\w{2,}@\w{2,}$').hasMatch(receiverUpiId)) {
       return Future.error(UpiIndiaInvalidParametersException("Incorrect UPI ID provided"));
     }
 
-    if (amount < 1 || amount.isInfinite) {
+    if (receiverAccountNumber != null && !RegExp(r'^\d{9,18}$').hasMatch(receiverAccountNumber)) {
+      return Future.error(UpiIndiaInvalidParametersException(
+        "Invalid Account number provided! Indian Account number length varies between 9 to 18 only",
+      ));
+    }
+
+    if(receiverIfscCode != null && !RegExp(r'^[A-Za-z]{4}[a-zA-Z0-9]{7}$').hasMatch(receiverIfscCode)){
+      return Future.error(UpiIndiaInvalidParametersException(
+        "Invalid IFSC code provided!",
+      ));
+    }
+
+    if (amount < 1 || amount > 100000) {
       return Future.error(
         UpiIndiaInvalidParametersException(
-          "Incorrect amount provided. Range is between [1, Infinity)",
+          "Incorrect amount provided. Range is between 1 to 1,00,000",
         ),
       );
     }
@@ -185,14 +209,21 @@ class UpiIndia {
       return Future.error(UpiIndiaInvalidParametersException("Only INR is currently supported"));
     }
 
-    print("further processing");
+    String receiver;
+
+    if(receiverUpiId != null){
+      receiver = receiverUpiId;
+    }else{
+      receiver = "$receiverAccountNumber@$receiverIfscCode.ifsc.npci";
+    }
+    print(receiver);
     return _channel.invokeMethod('startTransaction', {
       "app": app.packageName,
-      'receiverUpiId': receiverUpiId,
+      'receiverUpiId': receiver,
       'receiverName': receiverName,
       'transactionRefId': transactionRefId,
       'transactionNote': transactionNote,
-      'amount': flexibleAmount?'':amount.toString(),
+      'amount': flexibleAmount ? '' : amount.toString(),
       'currency': currency,
       'merchantId': merchantId,
     }).then((response) {

@@ -1,4 +1,4 @@
-## 2.2.0
+## 2.2.0-dev.1
 **Breaking Change**
 * `startTransaction` now does not return **UpiResponse** on error, rather throws error.
 * Names of predefined apps now use camelCase as they are no longer constants.

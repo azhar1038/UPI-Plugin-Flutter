@@ -1,7 +1,7 @@
 name: upi_india
 description: A flutter plugin to do UPI transaction through different apps in Android.
-version: 2.2.0-beta
-author: Md.Azharuddin<mdazharuddin1011999@gmail.com>
+version: 2.2.0-dev.1
+#author: Md.Azharuddin<mdazharuddin1011999@gmail.com>
 homepage: https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter
 
 environment:

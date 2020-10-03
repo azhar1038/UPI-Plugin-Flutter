@@ -161,13 +161,13 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
             String uriString = "upi://pay?pa="+receiverUpiId+
                     "&pn="+Uri.encode(receiverName)+
                     "&am="+Uri.encode(amount);
-            if (transactionNote != null) uriString += "&tn=" + transactionNote;
-            if (transactionRefId != null) uriString += "&tr=" + transactionRefId;
+            if (transactionNote != null) uriString += "&tn=" + Uri.encode(transactionNote);
+            if (transactionRefId != null) uriString += "&tr=" + Uri.encode(transactionRefId);
             if (currency == null) uriString += "&cu=INR";
-            else uriString += "&cu="+currency;
-            if (url != null) uriString += "&url=" + url;
-            if (merchantId != null) uriString += "&mc" + merchantId;
-            uriString += "&mode=04";
+            else uriString += "&cu="+Uri.encode(currency);
+            if (url != null) uriString += "&url=" + Uri.encode(url);
+            if (merchantId != null) uriString += "&mc" + Uri.encode(merchantId);
+            uriString += "&mode=00";
 
             Uri uri = Uri.parse(uriString);
 
