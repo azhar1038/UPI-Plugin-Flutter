@@ -1,6 +1,6 @@
 # UPI India (for Android only)
 
-This plugin is used to integrate **UPI** Options in your **Android** app.  
+This plugin is used to integrate **UPI** Options in your **Android** app. You can use this plugin to initiate transaction to any UPI ID or to any Account number.  
 [Check the Supported apps here.](#supported-apps)
 
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
@@ -18,7 +18,12 @@ Thanks in advance :)
 
 ## Classes to know
 1. **UpiIndia** - It is the main class containing two methods:
-getAllUpiApps(),  startTransaction()
+* getAllUpiApps() - It takes: 
+  * `bool mandatoryTransactionId`: Should include those apps which doesn't return Transaction ID or not  
+  * `bool allowNonVerifiedApps`: Should include apps whose working has not been verified yet or not  
+  * `List[UpiApp] includeOnly`: List of UpiApps which should be shown and hide the others.
+
+* startTransaction()
 
 2. **UpiApp** - It contains package name of some popular UPI apps. It is also the model class for the apps returned by getAllUpiApps() and now stores **app icons** too.
 
@@ -84,13 +89,15 @@ UpiApp app = UpiApp.googlePay;
 and assign it to the app parameter in **Step 4**
 
 ### Step 4:
-Create a method which will start the transaction on being called, as shown.
+Create a method which will start the transaction on being called, as shown.  
+To initiate transaction to any UPI ID, directly pass the ID to `receiverId`  
+To initiate transaction to any Bank Account use `_upiIndia.getIdFromAccount()` method and pass the Account number and IFSC code
 
 ```dart
 Future<UpiResponse> initiateTransaction(String app) async {
   return _upiIndia.startTransaction(
     app: apps[0], //  I took only the first app from List<UpiIndiaApp> app.
-    receiverUpiId: 'tester@test', // Make Sure to change this UPI Id
+    receiverId: 'tester@test', // Make Sure to change this UPI Id
     receiverName: 'Tester',
     transactionRefId: 'TestingId',
     transactionNote: 'Not actual. Just an example.',

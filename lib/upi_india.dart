@@ -141,7 +141,10 @@ class UpiIndia {
 
     /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
     /// Double check this value or you may end up paying the wrong person.
-    @required String receiverId,
+    String receiverId,
+
+    /// Has been replaced by receiverId and will be removed in future
+    @deprecated String receiverUpiId,
 
     /// receiverName is the name of the Payee( who will receive the  money)
     @required String receiverName,
@@ -171,11 +174,13 @@ class UpiIndia {
     /// Payee merchant code. If present then needs to be passed as it is.
     String merchantId,
   }) {
-//    assert((merchantId != null && transactionRefId != null) || merchantId == null);
     assert(app != null);
-    assert(receiverId != null);
+    assert(receiverId != null || receiverUpiId != null);
     assert(receiverName != null);
     assert(transactionRefId != null);
+    assert((merchantId != null && transactionRefId != null) || merchantId == null);
+
+    if(receiverId == null) receiverId = receiverUpiId;
 
     if (receiverId.split("@").length != 2) {
       return Future.error(UpiIndiaInvalidParametersException("Incorrect UPI ID provided"));
