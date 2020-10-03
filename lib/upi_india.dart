@@ -67,7 +67,7 @@ List<String> _nonVerifiedApps = [
 //  UpiApp.candi.packageName, // Reetesh: Keeps saying transaction failed
 //  UpiApp.indianBankUpi.packageName, // Reetesh: Unstable behaviour
 //  UpiApp.jetPay.packageName,
-  // Reetesh: Intent invocation gets a java.lang.SecurityException: Permission Denial
+// Reetesh: Intent invocation gets a java.lang.SecurityException: Permission Denial
 //  UpiApp.kblUpi.packageName, // Reetesh: Mandatory values are missing
 //  UpiApp.kvbUpay.packageName, // Reetesh: Does not auto fill input data
 //  UpiApp.lvbUpaay.packageName, // Reetesh: Does not return back after payment with response
@@ -81,10 +81,10 @@ class UpiIndia {
   static MethodChannel _channel;
 
   UpiIndia() {
-    _channel = const MethodChannel('upi_india');
+    _channel = const MethodChannel('com.az.upi_india');
   }
 
-  /// This method will return the [List] of all apps in users device which can handle UPI Intents as [UpiIndiaApp]
+  /// This method will return the [List] of all apps in users device which can handle UPI Intents as [UpiApp]
   Future<List<UpiApp>> getAllUpiApps({
     /// Is it necessary for the requested app to return Transaction ID on completion of transaction.
     /// Defaults to true
@@ -96,6 +96,10 @@ class UpiIndia {
     /// Set this to true if you want to include the non-verified apps in the list too.
     /// It is recommended to set this to false for production.
     bool allowNonVerifiedApps = false,
+
+    /// Pass the [UpiApp]s that you want to support.
+    /// Only these apps will be returned if they are installed on user device while others will be dropped.
+    List<UpiApp> includeOnly,
   }) async {
     List<Map> apps;
     try {
@@ -109,12 +113,18 @@ class UpiIndia {
       }
     }
     List<UpiApp> upiIndiaApps = [];
-    List<String> _validApps = _verifiedApps;
-    if (allowNonVerifiedApps) {
-      _validApps.addAll(_nonVerifiedApps);
-    }
-    if (!mandatoryTransactionId) {
-      _validApps.addAll(_appsReturningNoTxnId);
+    List<String> _validApps;
+    if (includeOnly != null && includeOnly.length > 0) {
+      _validApps = [];
+      includeOnly.forEach((app) => _validApps.add(app.packageName));
+    } else {
+      _validApps = _verifiedApps;
+      if (allowNonVerifiedApps) {
+        _validApps.addAll(_nonVerifiedApps);
+      }
+      if (!mandatoryTransactionId) {
+        _validApps.addAll(_appsReturningNoTxnId);
+      }
     }
     apps.forEach((app) {
       if (_validApps.contains(app['packageName'])) {
@@ -235,24 +245,26 @@ class UpiIndia {
   }
 
   /// To generate normalized and fully qualified payment address using Account number and IFSC code.
-  String getIdFromAccount(String accountNumber, String ifscCode){
+  /// IMPORTANT: This is not supported by all apps.
+  String getIdFromAccount(String accountNumber, String ifscCode) {
     return "$accountNumber@$ifscCode.ifsc.npci";
   }
 
-  /// To generate normalized and fully qualified payment address using Aadhaar number.
-  /// Aadhar number should be linked to account otherwise transaction will fail.
-  String getIdFromAadhaar(String aadhaarNumber){
-    return "$aadhaarNumber@aadhar.npci";
-  }
-
-  /// To generate normalized and fully qualified payment address using Mobile number.
-  /// Mobile number should be registered otherwise transaction will fail
-  String getIdFromMobile(String mobileNumber){
-    return "$mobileNumber@mobile.npci";
-  }
-
-  /// To generate normalized and fully qualified payment address using RuPay card number.
-  String getIdFromRuPay(String ruPayNumber){
-    return "$ruPayNumber@rupay.npci";
-  }
+// Do not know if these still work.
+//  /// To generate normalized and fully qualified payment address using Aadhaar number.
+//  /// Aadhar number should be linked to account otherwise transaction will fail.
+//  String getIdFromAadhaar(String aadhaarNumber){
+//    return "$aadhaarNumber@aadhar.npci";
+//  }
+//
+//  /// To generate normalized and fully qualified payment address using Mobile number.
+//  /// Mobile number should be registered otherwise transaction will fail
+//  String getIdFromMobile(String mobileNumber){
+//    return "$mobileNumber@mobile.npci";
+//  }
+//
+//  /// To generate normalized and fully qualified payment address using RuPay card number.
+//  String getIdFromRuPay(String ruPayNumber){
+//    return "$ruPayNumber@rupay.npci";
+//  }
 }

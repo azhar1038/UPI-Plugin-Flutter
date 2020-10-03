@@ -41,16 +41,9 @@ public class UpiIndiaPlugin implements FlutterPlugin, MethodCallHandler, Activit
     private Result finalResult;
     private boolean resultReturned;
 
-//    public static void registerWith(Registrar registrar) {
-//        final MethodChannel channel = new MethodChannel(registrar.messenger(), "com.az.upi_india");
-//        UpiIndiaPlugin _plugin = new UpiIndiaPlugin();
-//        registrar.addActivityResultListener(_plugin);
-//        channel.setMethodCallHandler(_plugin);
-//    }
-
     @Override
     public void onAttachedToEngine(@NonNull FlutterPluginBinding flutterPluginBinding) {
-        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "upi_india");
+        channel = new MethodChannel(flutterPluginBinding.getBinaryMessenger(), "com.az.upi_india");
         channel.setMethodCallHandler(this);
     }
 
