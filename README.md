@@ -106,7 +106,7 @@ To initiate transaction to any Bank Account use `_upiIndia.getIdFromAccount()` m
 ```dart
 Future<UpiResponse> initiateTransaction(String app) async {
   return _upiIndia.startTransaction(
-    app: apps[0], //  I took only the first app from List<UpiIndiaApp> app.
+    app: apps[0], //  I took only the first app from List<UpiApp> app.
     receiverId: 'tester@test', // Make Sure to change this UPI Id
     receiverName: 'Tester',
     transactionRefId: 'TestingId',

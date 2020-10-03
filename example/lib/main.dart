@@ -35,10 +35,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _upiIndia.getAllUpiApps(
-      mandatoryTransactionId: false,
-      includeOnly: [UpiApp.googlePay, UpiApp.phonePe, UpiApp.paytm, UpiApp.bhim],
-    ).then((value) {
+    _upiIndia.getAllUpiApps(mandatoryTransactionId: false).then((value) {
       setState(() {
         apps = value;
       });
