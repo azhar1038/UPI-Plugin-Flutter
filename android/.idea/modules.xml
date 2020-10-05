@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/upi_india.iml" filepath="$PROJECT_DIR$/.idea/upi_india.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/upi_india.iml" filepath="$PROJECT_DIR$/.idea/modules/upi_india.iml" group="upi_india" />
     </modules>
   </component>
 </project>
