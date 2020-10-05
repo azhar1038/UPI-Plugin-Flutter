@@ -81,21 +81,18 @@ class _HomePageState extends State<HomePage> {
   }
   
   String _upiErrorHandler(error) {
-      switch (error) {
-          case UpiError.APP_NOT_INSTALLED:
-             text = "Requested app not installed on device";
-             break;
-          case UpiError.INVALID_PARAMETERS:
-              text = "Requested app cannot handle the transaction";
-              break;
-          case UpiError.NULL_RESPONSE:
-              text = "requested app didn't returned any response";
-              break;
-          case UpiError.USER_CANCELLED:
-               text = "You cancelled the transaction";
-               break;
+    switch (error) {
+      case UpiIndiaAppNotInstalledException:
+        return 'Requested app not installed on device';
+      case UpiIndiaUserCancelledException:
+        return 'You cancelled the transaction';
+      case UpiIndiaNullResponseException:
+        return 'Requested app didn\'t return any response';
+      case UpiIndiaInvalidParametersException:
+        return 'Requested app cannot handle the transaction';
+      default:
+        return 'An Unknown error has occurred';
       }
-
   }
   
   void _checkTxnStatus(UpiPaymentStatus status) {
@@ -130,17 +127,14 @@ class _HomePageState extends State<HomePage> {
               builder: (BuildContext context,
                   AsyncSnapshot<UpiResponse> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasError) {
-                    return Center(child: Text('An Unknown error has occured'));
-                  }
                   UpiResponse _upiResponse;
-                  _upiResponse = snapshot.data;
-                  if (_upiResponse.error != null) {
-                    String text = _upiErrorHandler(_upiResponse.error);
+
+                  if (snapshot.hasError) {
                     return Center(
-                      child: Text(text),
+                      child: Text(_upiService.errorHandler(snapshot)), // Print's text message on screen
                     );
                   }
+                  
                   String txnId = _upiResponse.transactionId;
                   String resCode = _upiResponse.responseCode;
                   String txnRef = _upiResponse.transactionRefId;
