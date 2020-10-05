@@ -113,10 +113,10 @@ class _HomePageState extends State<HomePage> {
         return 'Requested app cannot handle the transaction';
       default:
         return 'An Unknown error has occurred';
-      }
+    }
   }
-  
-  void _checkTxnStatus(UpiPaymentStatus status) {
+
+  void _checkTxnStatus(String status) {
     switch (status) {
       case UpiPaymentStatus.SUCCESS:
         print('Transaction Successful');
@@ -129,7 +129,7 @@ class _HomePageState extends State<HomePage> {
         break;
       default:
         print('Received an Unknown transaction status');
-     }
+    }
   }
 
   Widget displayTransactionData(title, body) {
@@ -165,93 +165,36 @@ class _HomePageState extends State<HomePage> {
               future: _transaction,
               builder: (BuildContext context, AsyncSnapshot<UpiResponse> snapshot) {
                 if (snapshot.connectionState == ConnectionState.done) {
-                  
-                  UpiResponse _upiResponse;
-
                   if (snapshot.hasError) {
                     return Center(
-                      child: Text(_upiService.errorHandler(snapshot)), // Print's text message on screen
+                      child: Text(
+                        _upiErrorHandler(snapshot.error.runtimeType),
+                        style: header,
+                      ), // Print's text message on screen
                     );
                   }
-                  
-                  String txnId = _upiResponse.transactionId;
-                  String resCode = _upiResponse.responseCode;
-                  String txnRef = _upiResponse.transactionRefId;
-                  String status = _upiResponse.status;
-                  String approvalRef = _upiResponse.approvalRefNo;
+
+                  UpiResponse _upiResponse = snapshot.data;
+
+                  String txnId = _upiResponse.transactionId ?? 'N/A';
+                  String resCode = _upiResponse.responseCode ?? 'N/A';
+                  String txnRef = _upiResponse.transactionRefId ?? 'N/A';
+                  String status = _upiResponse.status ?? 'N/A';
+                  String approvalRef = _upiResponse.approvalRefNo ?? 'N/A';
                   _checkTxnStatus(status);
-                  
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Text('Transaction Id: $txnId\n'),
-                      Text('Response Code: $resCode\n'),
-                      Text('Reference Id: $txnRef\n'),
-                      Text('Status: $status\n'),
-                      Text('Approval No: $approvalRef'),
-                    ],
-// =======
-//                   if (snapshot.hasError) {
-//                     print(snapshot.error.toString());
-//                     String errorText = "";
-//                     switch (snapshot.error.runtimeType) {
-//                       case UpiIndiaAppNotInstalledException:
-//                         errorText = "Requested app not installed on device";
-//                         break;
-//                       case UpiIndiaUserCancelledException:
-//                         errorText = "You cancelled the transaction";
-//                         break;
-//                       case UpiIndiaNullResponseException:
-//                         errorText = "Requested app didn't return any response";
-//                         break;
-//                       case UpiIndiaInvalidParametersException:
-//                         errorText = "Requested app cannot handle the transaction";
-//                         break;
-//                       default:
-//                         errorText = "An Unknown error has occurred";
-//                         break;
-//                     }
-//                     return Center(
-//                       child: Text(
-//                         errorText,
-//                         style: header,
-//                       ),
-//                     );
-//                   }
-//                   UpiResponse _upiResponse;
-//                   _upiResponse = snapshot.data;
-//                   String txnId = _upiResponse.transactionId ?? "N/A";
-//                   if (txnId.isEmpty) txnId = "N/A";
-//                   String resCode = _upiResponse.responseCode ?? "N/A";
-//                   String txnRef = _upiResponse.transactionRefId ?? "N/A";
-//                   String status = _upiResponse.status ?? "N/A";
-//                   String approvalRef = _upiResponse.approvalRefNo ?? 'N/A';
-//                   switch (status) {
-//                     case UpiPaymentStatus.SUCCESS:
-//                       print('Transaction Successful');
-//                       break;
-//                     case UpiPaymentStatus.SUBMITTED:
-//                       print('Transaction Submitted');
-//                       break;
-//                     case UpiPaymentStatus.FAILURE:
-//                       print('Transaction Failed');
-//                       break;
-//                     default:
-//                       print('Unknown Error occurred');
-//                   }
-//                   return Padding(
-//                     padding: const EdgeInsets.all(8.0),
-//                     child: Column(
-//                       mainAxisAlignment: MainAxisAlignment.center,
-//                       children: <Widget>[
-//                         displayTransactionData('Transaction Id', txnId),
-//                         displayTransactionData('Response Code', resCode),
-//                         displayTransactionData('Reference Id', txnRef),
-//                         displayTransactionData('Status', status.toUpperCase()),
-//                         displayTransactionData('Approval No', approvalRef),
-//                       ],
-//                     ),
-// >>>>>>> beta-example
+
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        displayTransactionData('Transaction Id', txnId),
+                        displayTransactionData('Response Code', resCode),
+                        displayTransactionData('Reference Id', txnRef),
+                        displayTransactionData('Status', status.toUpperCase()),
+                        displayTransactionData('Approval No', approvalRef),
+                      ],
+                    ),
                   );
                 } else
                   return Center(
