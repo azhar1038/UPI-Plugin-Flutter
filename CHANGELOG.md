@@ -1,3 +1,7 @@
+## 2.2.0-dev.3
+* `receiverUpiId` is back.
+* removed `getIdFromAccount` because of it's incompatibility with most UPI Apps. You can still pass it manually if you want.
+
 ## 2.2.0-dev.2
 * `receiverUpiId` has been deprecated and may be removed in future versions use `receiverId` instead
 * Now you can use Account number and IFSC code to send money. Use `getIdFromAccount` method to generate the ID using Account number and IFSC code

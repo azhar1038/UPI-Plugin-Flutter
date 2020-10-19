@@ -141,10 +141,7 @@ class UpiIndia {
 
     /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
     /// Double check this value or you may end up paying the wrong person.
-    String receiverId,
-
-    /// Has been replaced by receiverId and will be removed in future
-    @deprecated String receiverUpiId,
+    @required String receiverUpiId,
 
     /// receiverName is the name of the Payee( who will receive the  money)
     @required String receiverName,
@@ -175,14 +172,12 @@ class UpiIndia {
     String merchantId,
   }) {
     assert(app != null);
-    assert(receiverId != null || receiverUpiId != null);
+    assert(receiverUpiId != null);
     assert(receiverName != null);
     assert(transactionRefId != null);
     assert((merchantId != null && transactionRefId != null) || merchantId == null);
 
-    if(receiverId == null) receiverId = receiverUpiId;
-
-    if (receiverId.split("@").length != 2) {
+    if (receiverUpiId.split("@").length != 2) {
       return Future.error(UpiIndiaInvalidParametersException("Incorrect UPI ID provided"));
     }
 
@@ -218,7 +213,7 @@ class UpiIndia {
 
     return _channel.invokeMethod('startTransaction', {
       "app": app.packageName,
-      'receiverUpiId': receiverId,
+      'receiverUpiId': receiverUpiId,
       'receiverName': receiverName,
       'transactionRefId': transactionRefId,
       'transactionNote': transactionNote,
@@ -249,11 +244,11 @@ class UpiIndia {
     }, test: (e) => e is PlatformException);
   }
 
-  /// To generate normalized and fully qualified payment address using Account number and IFSC code.
-  /// IMPORTANT: This is not supported by all apps.
-  String getIdFromAccount(String accountNumber, String ifscCode) {
-    return "$accountNumber@$ifscCode.ifsc.npci";
-  }
+  // /// To generate normalized and fully qualified payment address using Account number and IFSC code.
+  // /// IMPORTANT: This is not supported by all apps.
+  // String getIdFromAccount(String accountNumber, String ifscCode) {
+  //   return "$accountNumber@$ifscCode.ifsc.npci";
+  // }
 
 // Do not know if these still work.
 //  /// To generate normalized and fully qualified payment address using Aadhaar number.

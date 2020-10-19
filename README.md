@@ -101,7 +101,6 @@ and assign it to the app parameter in **Step 4**
 ### Step 4:
 Create a method which will start the transaction on being called, as shown.  
 To initiate transaction to any UPI ID, directly pass the ID to `receiverId`  
-To initiate transaction to any Bank Account use `_upiIndia.getIdFromAccount()` method and pass the Account number and IFSC code
 
 ```dart
 Future<UpiResponse> initiateTransaction(String app) async {
