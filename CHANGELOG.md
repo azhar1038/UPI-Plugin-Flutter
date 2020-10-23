@@ -1,20 +1,11 @@
-## 2.2.0-dev.3
-* `receiverUpiId` is back.
-* removed `getIdFromAccount` because of it's incompatibility with most UPI Apps. You can still pass it manually if you want.
-
-## 2.2.0-dev.2
-* `receiverUpiId` has been deprecated and may be removed in future versions use `receiverId` instead
-* Now you can use Account number and IFSC code to send money. Use `getIdFromAccount` method to generate the ID using Account number and IFSC code
-* `getAllUpiApps` has a new parameter `includeOnly` which takes`List<UpiApp>`.
-
-## 2.2.0-dev.1
+## 2.2.0
 **Breaking Change**
 * `startTransaction` now does not return **UpiResponse** on error, rather throws error.
 * Names of predefined apps now use camelCase as they are no longer constants.
 * `app` parameter of **UpiApp** has been renamed to `packageName` to avoid confusion.
 * `app` parameter passed in `startTransaction` now directly takes UpiApp instead of String.
 * New Custom error classes have been added.
-* `getAllUpiApps` now has two new parameters: `mandatoryTransactionId`, `allowNonVerifiedApps`
+* `getAllUpiApps` now has three new parameters: `mandatoryTransactionId`, `allowNonVerifiedApps`, `includeOnly`.
 * Airtel Thanks (My Airtel) has been moved to incompatible app group as it was not returning any response.
 * New UPI Apps included.
 * Now only the supported apps will be returned by `getAllUpiApps`.
