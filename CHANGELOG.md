@@ -1,3 +1,6 @@
+## 2.2.0+1
+Added Warning about "Maximum limit exceeded" and "Risk threshold exceeded" in Readme.
+
 ## 2.2.0
 **Breaking Change**
 * `startTransaction` now does not return **UpiResponse** on error, rather throws error.
