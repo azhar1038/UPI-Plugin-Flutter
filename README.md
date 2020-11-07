@@ -5,6 +5,9 @@ This plugin is used to integrate **UPI** Options in your **Android** app. You ca
 
 For a complete example of how to use this plugin, look at the **Example** tab or in the [Github repository](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/blob/master/example/lib/main.dart).
 
+# IMPORTANT!
+Some apps like Google Pay, PhonePe, Paytm are currently unable to process the transaction and showing "Maximum limit exceeded" or "Risk threshold exceeded" errors. Reason for this is not clear yet.
+
 ## Help required
 If you can help to extend this for iOS, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/20).  
 If you can help to verify the compatibility of different UPI apps, feel free to check [this issue](https://github.com/mdazharuddin1011999/UPI-Plugin-Flutter/issues/23).
@@ -168,26 +171,26 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 ## Supported Apps
 #### Verified Apps - These Apps have been tested to work fine with this plugin (included by default):
 * All Bank 
-* **Amazon Pay** 
+* Amazon Pay 
 * Axis Pay 
 * Baroda Pay 
-* **BHIM** 
+* BHIM 
 * Cent UPI 
 * Cointab 
 * Corp UPI 
 * DCB UPI 
 * Fino BPay 
 * Freecharge 
-* **Google Pay** 
+* Google Pay 
 * iMobile ICICI 
 * Indus Pay 
 * Khaali Jeb 
 * Maha UPI 
 * Mobikwik 
 * Oriental Pay 
-* **Paytm** 
+* Paytm 
 * Paywiz 
-* **PhonePe** 
+* PhonePe 
 * PSB 
 * SBI Pay 
 * Yes Pay 
@@ -225,5 +228,9 @@ For a complete example of how to use this plugin, look at the **Example** tab or
 * Synd UPI
 * UCO UPI
 * Ultra Cash
+
+# Special Thanks to:
+* [Reetesh Ranjan](https://github.com/reeteshranjan) for his contributions in making this plugin much better!
+* [Yashwardhan Pauranik](https://github.com/yashwp) for enhancing the example app!
 
 Don't forget to give Like and Stars!
