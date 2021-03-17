@@ -1,15 +1,14 @@
 // This Plugin is only for use in India. It uses UPI- Unified Payment Interface.
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:upi_india/upi_app.dart';
 import 'package:upi_india/upi_exception.dart';
 import 'package:upi_india/upi_response.dart';
 
 export 'package:upi_india/upi_app.dart';
-export 'package:upi_india/upi_response.dart';
 export 'package:upi_india/upi_exception.dart';
+export 'package:upi_india/upi_response.dart';
 
 List<String> _verifiedApps = [
   UpiApp.allBank.packageName,
@@ -78,7 +77,7 @@ List<String> _nonVerifiedApps = [
 
 // This is the main class.
 class UpiIndia {
-  static MethodChannel _channel;
+  static late MethodChannel _channel;
 
   UpiIndia() {
     _channel = const MethodChannel('com.az.upi_india');
@@ -99,9 +98,9 @@ class UpiIndia {
 
     /// Pass the [UpiApp]s that you want to support.
     /// Only these apps will be returned if they are installed on user device while others will be dropped.
-    List<UpiApp> includeOnly,
+    List<UpiApp>? includeOnly,
   }) async {
-    List<Map> apps;
+    List<Map>? apps;
     try {
       apps = await _channel.invokeListMethod<Map>('getAllUpiApps');
     } on PlatformException catch (e) {
@@ -126,7 +125,7 @@ class UpiIndia {
         _validApps.addAll(_appsReturningNoTxnId);
       }
     }
-    apps.forEach((app) {
+    apps!.forEach((app) {
       if (_validApps.contains(app['packageName'])) {
         upiIndiaApps.add(UpiApp.fromMap(Map<String, dynamic>.from(app)));
       }
@@ -137,22 +136,22 @@ class UpiIndia {
   /// This method is used to initiate a transaction with given parameters.
   Future<UpiResponse> startTransaction({
     /// app refers to app name provided using [UpiApp] class.
-    @required UpiApp app,
+    required UpiApp app,
 
     /// receiverUpiId is the UPI ID of the Payee (who will receive the money).
     /// Double check this value or you may end up paying the wrong person.
-    @required String receiverUpiId,
+    required String receiverUpiId,
 
     /// receiverName is the name of the Payee( who will receive the  money)
-    @required String receiverName,
+    required String receiverName,
 
     /// transactionRefId is a unique literal which you can use to find the transaction later easily.
     /// It is mandatory for Merchant transactions and dynamic URL generation.
     /// In response the "txnRef" that you will receive must match this value.
-    @required String transactionRefId,
+    required String transactionRefId,
 
     /// transactionNote provides short description of transaction.
-    String transactionNote,
+    String? transactionNote,
 
     /// amount is the actual amount in decimal format (in INR by default) that should be paid.
     /// amount = 0 if you want user to enter the amount.
@@ -166,17 +165,11 @@ class UpiIndia {
 
     /// url when used, MUST BE related to the particular transaction and
     /// MUST NOT be used to send unsolicited information that are not relevant to the transaction.
-    String url,
+    String? url,
 
     /// Payee merchant code. If present then needs to be passed as it is.
-    String merchantId,
+    String? merchantId,
   }) {
-    assert(app != null);
-    assert(receiverUpiId != null);
-    assert(receiverName != null);
-    assert(transactionRefId != null);
-    assert((merchantId != null && transactionRefId != null) || merchantId == null);
-
     if (receiverUpiId.split("@").length != 2) {
       return Future.error(UpiIndiaInvalidParametersException("Incorrect UPI ID provided"));
     }
@@ -228,16 +221,16 @@ class UpiIndia {
       switch (e.code) {
         case "app_not_installed":
           throw UpiIndiaAppNotInstalledException();
-          break;
+
         case "null_response":
           throw UpiIndiaNullResponseException();
-          break;
+
         case "user_canceled":
           throw UpiIndiaUserCancelledException();
-          break;
+
         case "invalid_parameters":
           throw UpiIndiaInvalidParametersException();
-          break;
+
         default:
           throw e;
       }
