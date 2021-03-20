@@ -19,9 +19,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  Future<UpiResponse> _transaction;
+  Future<UpiResponse>? _transaction;
   UpiIndia _upiIndia = UpiIndia();
-  List<UpiApp> apps;
+  List<UpiApp>? apps;
 
   TextStyle header = TextStyle(
     fontSize: 18,
@@ -59,7 +59,7 @@ class _HomePageState extends State<HomePage> {
   Widget displayUpiApps() {
     if (apps == null)
       return Center(child: CircularProgressIndicator());
-    else if (apps.length == 0)
+    else if (apps!.length == 0)
       return Center(
         child: Text(
           "No apps found to handle transaction.",
@@ -72,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         child: SingleChildScrollView(
           physics: BouncingScrollPhysics(),
           child: Wrap(
-            children: apps.map<Widget>((UpiApp app) {
+            children: apps!.map<Widget>((UpiApp app) {
               return GestureDetector(
                 onTap: () {
                   _transaction = initiateTransaction(app);
@@ -174,8 +174,11 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
 
-                  UpiResponse _upiResponse = snapshot.data;
+                  // If we have data then definitely we will have UpiResponse.
+                  // It cannot be null
+                  UpiResponse _upiResponse = snapshot.data!;
 
+                  // Data in UpiResponse can be null. Check before printing
                   String txnId = _upiResponse.transactionId ?? 'N/A';
                   String resCode = _upiResponse.responseCode ?? 'N/A';
                   String txnRef = _upiResponse.transactionRefId ?? 'N/A';

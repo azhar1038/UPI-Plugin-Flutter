@@ -25,11 +25,11 @@ class UpiResponse {
       String key = _parts[i].split('=')[0];
       String value = _parts[i].split('=')[1];
       if (key.toLowerCase() == "txnid") {
-        transactionId = getValue(value);
+        transactionId = _getValue(value);
       } else if (key.toLowerCase() == "responsecode") {
-        responseCode = getValue(value);
+        responseCode = _getValue(value);
       } else if (key.toLowerCase() == "approvalrefno") {
-        approvalRefNo = getValue(value);
+        approvalRefNo = _getValue(value);
       } else if (key.toLowerCase() == "status") {
         if (value.toLowerCase().contains("success"))
           status = "success";
@@ -40,12 +40,12 @@ class UpiResponse {
         else
           status = "other";
       } else if (key.toLowerCase() == "txnref") {
-        transactionRefId = getValue(value);
+        transactionRefId = _getValue(value);
       }
     }
   }
 
-  String? getValue(String? s) {
+  String? _getValue(String? s) {
     if (s == null)
       return s;
     else if (s.isEmpty)
