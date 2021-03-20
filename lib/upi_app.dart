@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-enum _ValidUpiApps{
+enum _ValidUpiApps {
 //  airtelThanksUpi,
   allBank,
   amazonPay,
@@ -58,7 +58,6 @@ enum _ValidUpiApps{
 /// This is the model class of apps returned by [getAllUpiApps()].
 /// This class contains some predefined package names of UPI apps.
 class UpiApp {
-
   // --------------------------Start of pre-defined Apps-------------------------------
 //  /// Airtel Thanks(Airtel): com.myairtelapp
 //  static UpiApp airtelThanksUpi = UpiApp._fromEnum(_ValidUpiApps.airtelThanksUpi);
@@ -85,7 +84,7 @@ class UpiApp {
   static UpiApp bhim = UpiApp._fromEnum(_ValidUpiApps.bhim);
 
   /// BHIM BOI UPI(Bank of India Official): com.infra.boiupi
-  static UpiApp boiUpi= UpiApp._fromEnum(_ValidUpiApps.boiUpi);
+  static UpiApp boiUpi = UpiApp._fromEnum(_ValidUpiApps.boiUpi);
 
 //  /// CANDI-Mobile Banking App!(CANARA BANK): com.canarabank.mobility
 //  static UpiApp candi = UpiApp._fromEnum(_ValidUpiApps.candi);
@@ -218,22 +217,22 @@ class UpiApp {
   // ---------------------------End of pre-defined Apps---------------------------------
 
   /// app is the package name of the app. Pass this in [app] argument of [startTransaction]
-  String packageName;
+  late String packageName;
 
   /// This is the app name for display purpose
-  String name;
+  late String name;
 
   /// This is the icon of the UPI app. Pass it in [Image.memory()] to display the icon.
-  Uint8List icon;
+  late Uint8List icon;
 
   // Default constructor
-  UpiApp(appName, package){
+  UpiApp(appName, package) {
     packageName = package;
-    name=appName;
+    name = appName;
   }
-  
+
   // Constructor for enum
-  UpiApp._fromEnum(_ValidUpiApps app){
+  UpiApp._fromEnum(_ValidUpiApps app) {
     this.packageName = _getPackageName(app);
     this.name = _getName(app);
   }
@@ -244,9 +243,9 @@ class UpiApp {
     name = m['name'];
     icon = m['icon'];
   }
-  
-  String _getName(_ValidUpiApps app){
-    switch(app){
+
+  String _getName(_ValidUpiApps app) {
+    switch (app) {
 //      case _ValidUpiApps.airtelThanksUpi:
 //        return 'Airtel Thanks';
       case _ValidUpiApps.allBank:
