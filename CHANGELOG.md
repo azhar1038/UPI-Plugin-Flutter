@@ -1,3 +1,6 @@
+## 3.0.0
+Migrated to Null Safety
+
 ## 2.2.0+1
 Added Warning about "Maximum limit exceeded" and "Risk threshold exceeded" in Readme.
 
