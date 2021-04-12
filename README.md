@@ -78,17 +78,19 @@ UpiIndia _upiIndia = UpiIndia();
 Get list of all apps in the device which can handle UPI Intent, as shown.
 
 ```dart
-List<UpiIndiaApp> apps;
+  List<UpiApp>? apps;
 
-@override
-void initState() {
-  _upiIndia.getAllUpiApps().then((value) {
-    setState(() {
-      apps = value;
+  @override
+  void initState() {
+    _upiIndia.getAllUpiApps(mandatoryTransactionId: false).then((value) {
+      setState(() {
+        apps = value;
+      });
+    }).catchError((e) {
+      apps = [];
     });
-  });
-  super.initState();
-}
+    super.initState();
+  }
 ```
 
 **OR**
@@ -106,16 +108,16 @@ Create a method which will start the transaction on being called, as shown.
 To initiate transaction to any UPI ID, directly pass the ID to `receiverId`  
 
 ```dart
-Future<UpiResponse> initiateTransaction(String app) async {
-  return _upiIndia.startTransaction(
-    app: apps[0], //  I took only the first app from List<UpiApp> app.
-    receiverId: 'tester@test', // Make Sure to change this UPI Id
-    receiverName: 'Tester',
-    transactionRefId: 'TestingId',
-    transactionNote: 'Not actual. Just an example.',
-    amount: 1.00,
-  );
-}
+  Future<UpiResponse> initiateTransaction(UpiApp app) async {
+    return _upiIndia.startTransaction(
+      app: app,
+      receiverUpiId: "9078600498@ybl",
+      receiverName: 'Md Azharuddin',
+      transactionRefId: 'TestingUpiIndiaPlugin',
+      transactionNote: 'Not actual. Just an example.',
+      amount: 1.00,
+    );
+  }
 ```
 
 ### Step 5:
@@ -129,7 +131,6 @@ After getting the snapshot from the Future, check if there is any error or not:
 
 ```dart
 if (snapshot.hasError) {
-  print(snapshot.error.toString());
   switch (snapshot.error.runtimeType) {
     case UpiIndiaAppNotInstalledException:
       print("Requested app not installed on device");

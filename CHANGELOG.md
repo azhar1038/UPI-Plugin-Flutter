@@ -1,3 +1,7 @@
+## 3.0.1
+* `getAllUpiApps()` now supports Android 11+ 
+* Updated Readme
+
 ## 3.0.0
 Migrated to Null Safety
 
