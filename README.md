@@ -1,3 +1,6 @@
+# This repository is now Archived.
+
+
 # UPI India (for Android only)
 
 This plugin is used to integrate **UPI** Options in your **Android** app. You can use this plugin to initiate transaction to any UPI ID or to any Account number.  
